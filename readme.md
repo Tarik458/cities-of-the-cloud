@@ -1,3 +1,18 @@
+### Cities of the Cloud ###
+
+By Quackheads (we can still change our team name if anybody would like to, btw)
+
+
+
+
+
+
+
+
+
+
+
+
 ### Blank Unity Project ### 
 
 This repository has been pre-configured with a .gitignore and .gitattributes file specific to Unity projects using git-lfs. 
