@@ -11,7 +11,7 @@ public class Building : MonoBehaviour
     public Camera buildCamera; 
     public List<GameObject> Buildings = new List<GameObject>();
 
-
+    // Initialise.
     void Start()
     {
         BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings);
@@ -25,6 +25,9 @@ public class Building : MonoBehaviour
         }
     }
 
+    // Add raycasting for mouse.
+
+    // Changes camera and pauses / unpauses game.
     private void CameraChange()
     {
         switch(mainCamera.enabled)

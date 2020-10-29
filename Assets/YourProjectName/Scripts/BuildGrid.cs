@@ -18,6 +18,7 @@ public class BuildGrid
         this.tileSize = tileSize;
         tileArray = new int[width, height];
 
+        // Create grid of blank tiles. (Maybe needs to be list so can be expanded more? Or large of blank tiles so building space not limited?) 
         for (int x = 0; x < tileArray.GetLength(0); x++)
         {
             for (int y = 0; y < tileArray.GetLength(1); y++)
