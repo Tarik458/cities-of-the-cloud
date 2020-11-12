@@ -4,23 +4,21 @@ using UnityEngine;
 
 public class Cities : MonoBehaviour
 {
-    public CharacterController controller;
-    public int InWindZones= 0;
+    public int InWindZones;
     public Rigidbody rb;
     public GameObject WindZone;
-    
 
-    public float speed = 12;
+    public float forwardForce;
+    public float sideForce;
 
+    public float citySpeed;
 
-    Vector3 velocity;
-    bool isGrounded;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-    }
 
+    }
 
     void OnTriggerEnter(Collider coll)
     {
@@ -43,25 +41,34 @@ public class Cities : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isGrounded && velocity.y < 0)
+        if (InWindZones > 0)
         {
-            velocity.y = 2f;
+            rb.AddForce(WindZone.GetComponent<WindArea>().Direction * WindZone.GetComponent<WindArea>().Force);
         }
 
-        float X = Input.GetAxis("Horizontal");
-        float Z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * X + transform.forward * Z;
-
-        Vector3 Windforce = Vector3.zero; 
-
-        if (InWindZones>0)
+        if (Input.GetKey("a"))
         {
-           Windforce += WindZone.GetComponent<WindArea>().Direction * WindZone.GetComponent<WindArea>().Force;
+            rb.AddForce(-sideForce, 0, 0);
         }
 
-        rb.velocity=(move * speed + Windforce);
+        if (Input.GetKey("d"))
+        {
+            rb.AddForce(sideForce, 0, 0);
+        }
+
+        if (Input.GetKey("w"))
+        {
+            rb.AddForce(0, 0, forwardForce);
+
+        }
+
+        if (Input.GetKey("s"))
+        {
+            rb.AddForce(0, 0, -forwardForce);
+        }
+
     }
+
 
 }
 
