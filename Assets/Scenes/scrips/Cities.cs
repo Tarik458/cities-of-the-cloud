@@ -17,7 +17,6 @@ public class Cities : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
     }
 
     void OnTriggerEnter(Collider coll)
@@ -38,14 +37,8 @@ public class Cities : MonoBehaviour
 
     }
 
-
-    void FixedUpdate()
+    void Update()
     {
-        if (InWindZones > 0)
-        {
-            rb.AddForce(WindZone.GetComponent<WindArea>().Direction * WindZone.GetComponent<WindArea>().Force);
-        }
-
         if (Input.GetKey("a"))
         {
             rb.AddForce(-sideForce, 0, 0);
@@ -59,23 +52,26 @@ public class Cities : MonoBehaviour
         if (Input.GetKey("w"))
         {
             rb.AddForce(0, 0, forwardForce);
-
         }
 
         if (Input.GetKey("s"))
         {
             rb.AddForce(0, 0, -forwardForce);
         }
-
     }
 
 
+    void FixedUpdate()
+    {
+        if (InWindZones > 0)
+        {
+            rb.AddForce(WindZone.GetComponent<WindArea>().Direction * WindZone.GetComponent<WindArea>().Force);
+        }
+
+        else 
+        {
+            rb.AddForce(0, 0, 0);
+        }
+    }
+
 }
-
-
-
-
-
-
-
-
