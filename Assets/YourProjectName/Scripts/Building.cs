@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
@@ -9,14 +10,14 @@ public class Building : MonoBehaviour
     public int tileSize;
 
     public Camera mainCamera;
-    public Camera buildCamera; 
+    public Camera buildCamera;
+    public Canvas GamOverlay;
+    public Canvas BldOverlay;
     public List<GameObject> Buildings = new List<GameObject>();
 
     private bool trackingMouse;
-    private bool firstTime = true; 
-    private Renderer oldRend;
     private GameObject currentHit;
-    private GameObject previousHit;
+    private GameObject toPlace;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
 
 
@@ -35,45 +36,35 @@ public class Building : MonoBehaviour
         }
         if (trackingMouse)
         {
-            MouseRaycast(firstTime);
+            MouseRaycast(toPlace);
         }
     }
 
     // Track mouse position on screen and highlight tile hovered over.
-    private void MouseRaycast(bool firstTime)
+    private void MouseRaycast(GameObject buildingToUse)
     {
         Ray ray = buildCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (firstTime)
-        {
-            if (Physics.Raycast(ray, out hit))
-            {
-                Renderer rend = hit.transform.gameObject.GetComponent<Renderer>();
-                previousHit = hit.transform.gameObject;
-                oldRend = previousHit.transform.gameObject.GetComponent<Renderer>();
-                firstTime = false;
-            }
-        }
-
         if (Physics.Raycast(ray, out hit))
         {
-
-            Renderer rend = hit.transform.gameObject.GetComponent<Renderer>();
-            oldRend = previousHit.transform.gameObject.GetComponent<Renderer>();
             currentHit = hit.transform.gameObject;
-
-            if (rend)
+            
+            if (Input.GetMouseButtonDown(0))
             {
-                oldRend.material.color = Color.grey;
-                rend.material.color = highlightColor;
+                Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation);
             }
-            previousHit = currentHit;
         }
     }
 
+
+    public void SelectBuilding()
+    {
+        toPlace = Buildings[1];
+    }
+
     // Changes camera and pauses / unpauses game.
-    private void CameraChange()
+    public void CameraChange()
     {
         switch(mainCamera.enabled)
         {
@@ -82,18 +73,24 @@ public class Building : MonoBehaviour
                 buildCamera.enabled = true;
                 trackingMouse = true;
                 Time.timeScale = 0;
+                GamOverlay.enabled = false;
+                BldOverlay.enabled = true;
                 break;
             case false:
                 mainCamera.enabled = true;
                 buildCamera.enabled = false;
                 trackingMouse = false;
                 Time.timeScale = 1;
+                GamOverlay.enabled = true;
+                BldOverlay.enabled = false;
                 break;
             default:
                 mainCamera.enabled = false;
                 buildCamera.enabled = true;
                 trackingMouse = true;
                 Time.timeScale = 0;
+                GamOverlay.enabled = false;
+                BldOverlay.enabled = true;
                 break;
         }
     }
