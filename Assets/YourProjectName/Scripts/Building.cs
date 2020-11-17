@@ -16,6 +16,7 @@ public class Building : MonoBehaviour
     public List<GameObject> Buildings = new List<GameObject>();
 
     private bool trackingMouse;
+    private bool removing;
     private GameObject currentHit;
     private GameObject toPlace;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
@@ -49,18 +50,43 @@ public class Building : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             currentHit = hit.transform.gameObject;
-            
-            if (Input.GetMouseButtonDown(0))
+
+            if (Input.GetMouseButtonDown(0) && toPlace != null)
             {
-                Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation);
+                if (currentHit.name == "TilePlaceholder(Clone)" || removing == true)
+                {
+                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation);
+                    Destroy(currentHit);
+                }
+                toPlace = null;
             }
         }
     }
 
-
-    public void SelectBuilding()
+    // Allows building to place to be selected by buttons.
+    public void SelectBuilding(int buttonNum)
     {
-        toPlace = Buildings[1];
+        switch (buttonNum)
+        {
+            case 0:
+                toPlace = Buildings[0];
+                removing = true;
+                break;
+            case 1:
+                toPlace = Buildings[1];
+                break;
+            case 2:
+                toPlace = Buildings[2];
+                break;
+            default:
+                toPlace = null;
+                break;
+        }
+
+        if(removing == true && toPlace != Buildings[0])
+        {
+            removing = false;
+        }
     }
 
     // Changes camera and pauses / unpauses game.
