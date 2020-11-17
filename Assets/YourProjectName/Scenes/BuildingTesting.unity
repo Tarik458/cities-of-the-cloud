@@ -393,8 +393,8 @@ MonoBehaviour:
   BldOverlay: {fileID: 938883058}
   Buildings:
   - {fileID: 5099939652987079408, guid: 534f1619c316d2e4a9363538a7e9e400, type: 3}
-  - {fileID: 4431668927834499497, guid: 4c494836c1c172847ade541611a63f0a, type: 3}
-  - {fileID: 5331715295603033250, guid: 1f81a3bc7e091be4cbd22750bdbd1698, type: 3}
+  - {fileID: 919132149155446097, guid: eb5465b6dfa4ee845a70fe650a2395fa, type: 3}
+  - {fileID: 919132149155446097, guid: 235e986f29f726a45be24fe59c562fe6, type: 3}
 --- !u!4 &266014756
 Transform:
   m_ObjectHideFlags: 0
