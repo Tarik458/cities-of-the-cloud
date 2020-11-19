@@ -386,7 +386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 4
   height: 4
-  tileSize: 5
+  tileSize: 10
   mainCamera: {fileID: 1324900197}
   buildCamera: {fileID: 4102219879623635699}
   GamOverlay: {fileID: 683450692}
@@ -1032,12 +1032,12 @@ PrefabInstance:
     - target: {fileID: 7646546087402909047, guid: b078d57f57397ec48952b0a7425e1a34,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 21.69
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7646546087402909047, guid: b078d57f57397ec48952b0a7425e1a34,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.78
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 7646546087402909047, guid: b078d57f57397ec48952b0a7425e1a34,
         type: 3}
@@ -1791,7 +1791,7 @@ PrefabInstance:
     - target: {fileID: 1166617441477059068, guid: 2ebe725172ac9ef429b2ec6f8b8a368f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1166617441477059068, guid: 2ebe725172ac9ef429b2ec6f8b8a368f,
         type: 3}

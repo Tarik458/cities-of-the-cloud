@@ -25,6 +25,7 @@ public class Building : MonoBehaviour
     // Initialise.
     void Start()
     {
+        BldOverlay.enabled = false;
         BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings);
         trackingMouse = false;
     }
@@ -55,12 +56,39 @@ public class Building : MonoBehaviour
             {
                 if (currentHit.name == "TilePlaceholder(Clone)" || removing == true)
                 {
-                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation);
+                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation * RandBuildRotate());
                     Destroy(currentHit);
                 }
                 toPlace = null;
             }
         }
+    }
+
+    private Quaternion RandBuildRotate()
+    {
+        int randRot;
+        float forQuat;
+        randRot = Random.Range(0, 3);
+        switch (randRot)
+        {
+            case 0:
+                forQuat = 0f;
+                break;
+            case 1:
+                forQuat = 90f;
+                break;
+            case 2:
+                forQuat = 180f;
+                break;
+            case 3:
+                forQuat = 270f;
+                break;
+            default:
+                forQuat = 0f;
+                break;
+        }
+
+        return Quaternion.Euler(0f, forQuat, 0f);
     }
 
     // Allows building to place to be selected by buttons.
