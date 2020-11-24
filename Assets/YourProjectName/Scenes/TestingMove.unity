@@ -2417,6 +2417,7 @@ MonoBehaviour:
   BuildCam: {fileID: 2108065766}
   MinZoom: 15
   MaxZoom: 30
+  camActive: 0
 --- !u!1 &929004767
 GameObject:
   m_ObjectHideFlags: 0
