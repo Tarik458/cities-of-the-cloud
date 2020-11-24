@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     public Camera BuildCam;
     public int MinZoom;
     public int MaxZoom;
+    public bool camActive = false;
     
 
     private float cameraX, cameraZ;
@@ -22,8 +23,15 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         Zoom();
+        if (camActive)
+        {
+            Move();
+        }
+    }
 
-        Move();
+    public void SetActive(bool activate)
+    {
+        camActive = activate;
     }
 
     private void Move()
