@@ -13,6 +13,7 @@ public class Building : MonoBehaviour
     public Camera buildCamera;
     public Canvas GamOverlay;
     public Canvas BldOverlay;
+    public GameObject City;
     public List<GameObject> Buildings = new List<GameObject>();
 
     private bool trackingMouse;
@@ -26,7 +27,7 @@ public class Building : MonoBehaviour
     void Start()
     {
         BldOverlay.enabled = false;
-        BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings);
+        BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings, City.transform);
         trackingMouse = false;
     }
 
@@ -50,13 +51,13 @@ public class Building : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            currentHit = hit.transform.gameObject;
+            currentHit = hit.collider.transform.gameObject;
 
             if (Input.GetMouseButtonDown(0) && toPlace != null)
             {
                 if (currentHit.name == "TilePlaceholder(Clone)" || removing == true)
                 {
-                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation * RandBuildRotate());
+                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation * RandBuildRotate(), City.transform);
                     Destroy(currentHit);
                 }
                 toPlace = null;
@@ -64,6 +65,28 @@ public class Building : MonoBehaviour
         }
     }
 
+    //private void OnMouseOver()
+    //{
+    //    if (trackingMouse == true)
+    //    {
+    //        objHighlight(true);
+    //    }
+    //}
+
+    //private void OnMouseExit()
+    //{
+    //    objHighlight(false);
+    //}
+
+    //public void EnableHighlight(bool onOff)
+    //{
+    //    if (meshRenderer != null && originalMaterial != null && highlightedMaterial != null)
+    //    {
+    //        meshRenderer.material = onOff ? highlightedMaterial : originalMaterial;
+    //    }
+    //}
+
+    // Generate a random rotation for buildings (for now).
     private Quaternion RandBuildRotate()
     {
         int randRot;
