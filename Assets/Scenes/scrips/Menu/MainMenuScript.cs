@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+
+
+
 public class MainMenuScript : MonoBehaviour
 {
+    public GameObject activator;
+    public GameObject timelineOff;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,5 +29,12 @@ public class MainMenuScript : MonoBehaviour
     {
         SceneManager.LoadScene("Cloud World");
     }
-        
+
+
+    public void GoToMenu()
+    {
+        activator.SetActive(true);
+        timelineOff.SetActive(false);
+    }
+
 }
