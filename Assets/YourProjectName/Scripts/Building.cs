@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
@@ -9,21 +10,24 @@ public class Building : MonoBehaviour
     public int tileSize;
 
     public Camera mainCamera;
-    public Camera buildCamera; 
+    public Camera buildCamera;
+    public Canvas GamOverlay;
+    public Canvas BldOverlay;
+    public GameObject City;
     public List<GameObject> Buildings = new List<GameObject>();
 
     private bool trackingMouse;
-    private bool firstTime = true; 
-    private Renderer oldRend;
+    private bool removing;
     private GameObject currentHit;
-    private GameObject previousHit;
+    private GameObject toPlace;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
 
 
     // Initialise.
     void Start()
     {
-        BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings);
+        BldOverlay.enabled = false;
+        BuildGrid BuildGrid = new BuildGrid(width, height, tileSize, Buildings, City.transform);
         trackingMouse = false;
     }
 
@@ -35,45 +39,109 @@ public class Building : MonoBehaviour
         }
         if (trackingMouse)
         {
-            MouseRaycast(firstTime);
+            MouseRaycast(toPlace);
         }
     }
 
     // Track mouse position on screen and highlight tile hovered over.
-    private void MouseRaycast(bool firstTime)
+    private void MouseRaycast(GameObject buildingToUse)
     {
         Ray ray = buildCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (firstTime)
-        {
-            if (Physics.Raycast(ray, out hit))
-            {
-                Renderer rend = hit.transform.gameObject.GetComponent<Renderer>();
-                previousHit = hit.transform.gameObject;
-                oldRend = previousHit.transform.gameObject.GetComponent<Renderer>();
-                firstTime = false;
-            }
-        }
-
         if (Physics.Raycast(ray, out hit))
         {
+            currentHit = hit.collider.transform.gameObject;
 
-            Renderer rend = hit.transform.gameObject.GetComponent<Renderer>();
-            oldRend = previousHit.transform.gameObject.GetComponent<Renderer>();
-            currentHit = hit.transform.gameObject;
-
-            if (rend)
+            if (Input.GetMouseButtonDown(0) && toPlace != null)
             {
-                oldRend.material.color = Color.grey;
-                rend.material.color = highlightColor;
+                if (currentHit.name == "TilePlaceholder(Clone)" || removing == true)
+                {
+                    Instantiate(buildingToUse, currentHit.transform.position, currentHit.transform.rotation * RandBuildRotate(), City.transform);
+                    Destroy(currentHit);
+                }
+                toPlace = null;
             }
-            previousHit = currentHit;
+        }
+    }
+
+    //private void OnMouseOver()
+    //{
+    //    if (trackingMouse == true)
+    //    {
+    //        objHighlight(true);
+    //    }
+    //}
+
+    //private void OnMouseExit()
+    //{
+    //    objHighlight(false);
+    //}
+
+    //public void EnableHighlight(bool onOff)
+    //{
+    //    if (meshRenderer != null && originalMaterial != null && highlightedMaterial != null)
+    //    {
+    //        meshRenderer.material = onOff ? highlightedMaterial : originalMaterial;
+    //    }
+    //}
+
+    // Generate a random rotation for buildings (for now).
+    private Quaternion RandBuildRotate()
+    {
+        int randRot;
+        float forQuat;
+        randRot = Random.Range(0, 3);
+        switch (randRot)
+        {
+            case 0:
+                forQuat = 0f;
+                break;
+            case 1:
+                forQuat = 90f;
+                break;
+            case 2:
+                forQuat = 180f;
+                break;
+            case 3:
+                forQuat = 270f;
+                break;
+            default:
+                forQuat = 0f;
+                break;
+        }
+
+        return Quaternion.Euler(0f, forQuat, 0f);
+    }
+
+    // Allows building to place to be selected by buttons.
+    public void SelectBuilding(int buttonNum)
+    {
+        switch (buttonNum)
+        {
+            case 0:
+                toPlace = Buildings[0];
+                removing = true;
+                break;
+            case 1:
+                toPlace = Buildings[1];
+                break;
+            case 2:
+                toPlace = Buildings[2];
+                break;
+            default:
+                toPlace = null;
+                break;
+        }
+
+        if(removing == true && toPlace != Buildings[0])
+        {
+            removing = false;
         }
     }
 
     // Changes camera and pauses / unpauses game.
-    private void CameraChange()
+    public void CameraChange()
     {
         switch(mainCamera.enabled)
         {
@@ -82,18 +150,24 @@ public class Building : MonoBehaviour
                 buildCamera.enabled = true;
                 trackingMouse = true;
                 Time.timeScale = 0;
+                GamOverlay.enabled = false;
+                BldOverlay.enabled = true;
                 break;
             case false:
                 mainCamera.enabled = true;
                 buildCamera.enabled = false;
                 trackingMouse = false;
                 Time.timeScale = 1;
+                GamOverlay.enabled = true;
+                BldOverlay.enabled = false;
                 break;
             default:
                 mainCamera.enabled = false;
                 buildCamera.enabled = true;
                 trackingMouse = true;
                 Time.timeScale = 0;
+                GamOverlay.enabled = false;
+                BldOverlay.enabled = true;
                 break;
         }
     }
