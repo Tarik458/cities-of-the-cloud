@@ -10,7 +10,7 @@ public class BuildGrid
     private int tileSize;
     private List<GameObject> Buildings;
 
-    public BuildGrid(int width, int height, int tileSize, List<GameObject> Buildings)
+    public BuildGrid(int width, int height, int tileSize, List<GameObject> Buildings, Transform parentCity)
     {
         this.Buildings = Buildings;
         this.width = width;
@@ -24,7 +24,7 @@ public class BuildGrid
             for (int y = 0; y < tileArray.GetLength(1); y++)
             {
                 tileArray[x, y] = 0;
-                Object.Instantiate(Buildings[0], new Vector3(TranslateToWorldPos(x, y)[0], 0f, TranslateToWorldPos(x, y)[1]), Quaternion.identity);
+                Object.Instantiate(Buildings[0], new Vector3(TranslateToWorldPos(x, y)[0], 0f, TranslateToWorldPos(x, y)[1]), Quaternion.identity, parentCity);
             }
         }
     }
