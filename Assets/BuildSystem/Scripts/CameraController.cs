@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         Zoom();
         if (camActive)
         {
-            Move();            
+            Move();
         }
     }
 
