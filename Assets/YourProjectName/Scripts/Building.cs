@@ -152,6 +152,7 @@ public class Building : MonoBehaviour
                 Time.timeScale = 0;
                 GamOverlay.enabled = false;
                 BldOverlay.enabled = true;
+                GetComponent<CameraController>().SetActive(true);
                 break;
             case false:
                 mainCamera.enabled = true;
@@ -160,6 +161,7 @@ public class Building : MonoBehaviour
                 Time.timeScale = 1;
                 GamOverlay.enabled = true;
                 BldOverlay.enabled = false;
+                GetComponent<CameraController>().SetActive(false);
                 break;
             default:
                 mainCamera.enabled = false;
@@ -168,6 +170,7 @@ public class Building : MonoBehaviour
                 Time.timeScale = 0;
                 GamOverlay.enabled = false;
                 BldOverlay.enabled = true;
+                GetComponent<CameraController>().SetActive(true);
                 break;
         }
     }
