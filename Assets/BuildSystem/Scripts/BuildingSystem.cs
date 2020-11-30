@@ -89,37 +89,47 @@ public class BuildingSystem : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             GameObject currentHit = hit.collider.transform.gameObject;
-
-            Debug.DrawLine(ray.origin, hit.point);
-            Vector2Int gridRef = m_buildGrid.TranslateWorldToGridPos(hit.point);
-            Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
-            EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);
-            if (gridBuilding == EBuildings.NULL)
+            if (currentHit.tag == "BuildTile")
             {
+                Debug.DrawLine(ray.origin, hit.point);
+                Vector2Int gridRef = m_buildGrid.TranslateWorldToGridPos(hit.point);
+                Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
+                EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);               
                 m_selectionMarker.SetActive(true);
-                m_selectionMarker.transform.position = gridPos;
+                m_selectionMarker.transform.position = gridPos;                
+
+                if (Input.GetMouseButtonDown(0) && m_selectedBuilding != EBuildings.NULL)
+                {
+                    if (m_selectedBuilding != EBuildings.DELETE && gridBuilding == EBuildings.NULL)
+                    {
+                        LeanPool.Despawn(currentHit);
+                        //check resource cost
+                        GameObject obj =LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].model, gridPos, m_randomRotation, City.transform);
+                        obj.tag = "BuildTile";
+                        m_buildGrid.setTileBuilding(gridRef, m_selectedBuilding);
+                        m_randomRotation = RandBuildRotate();
+                        m_selectionMarker.transform.rotation = m_randomRotation;
+
+                        //pay resource cost
+                    }
+                    else if (m_selectedBuilding == EBuildings.DELETE)
+                    {
+                        LeanPool.Despawn(currentHit);
+                        LeanPool.Spawn(m_blankTile, gridPos, RandBuildRotate(), City.transform);
+                        m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL);
+                    }
+
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    m_selectedBuilding = EBuildings.NULL;
+                    LeanPool.Despawn(m_selectionMarker);
+                    m_selectionMarker = LeanPool.Spawn(m_defaultSelectionMarker);
+                }
             }
-
-            if (Input.GetMouseButtonDown(0) && m_selectedBuilding != EBuildings.NULL)
+            else
             {
-                Debug.Log("despawn " + currentHit.name);
-                LeanPool.Despawn(currentHit);
-                if (m_selectedBuilding != EBuildings.DELETE && gridBuilding == EBuildings.NULL)
-                {
-                    //check resource cost
-                    LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].model, gridPos, m_randomRotation, City.transform);
-                    m_buildGrid.setTileBuilding(gridRef, m_selectedBuilding);
-
-                    //pay resource cost
-                }
-                else if (m_selectedBuilding == EBuildings.DELETE)
-                {
-                    LeanPool.Spawn(m_blankTile, gridPos, RandBuildRotate(), City.transform);
-                    m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL);
-                }
-
-
-                m_selectedBuilding = EBuildings.NULL;
+                m_selectionMarker.SetActive(false);
             }
         }
         else

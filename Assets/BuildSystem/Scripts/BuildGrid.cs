@@ -36,6 +36,7 @@ public class BuildGrid
                 GameObject obj = LeanPool.Spawn(blankTile, parent);
                 obj.SetActive(true);
                 obj.transform.position = worldPos3 + parent.transform.position;
+                obj.tag = "BuildTile";
             }
         }
     }
