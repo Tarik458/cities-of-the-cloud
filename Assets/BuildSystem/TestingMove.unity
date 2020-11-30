@@ -323,7 +323,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 916668901}
-        m_MethodName: SelectBuilding
+        m_MethodName: SelectBuildingToPlace
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2405,11 +2405,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 916668900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896e527831d208f40ab3ef8d048a49cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e3f415c61e6d644997bdb5a92bc726e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 4
-  height: 4
+  width: 25
+  height: 25
   tileSize: 10
   mainCamera: {fileID: 2141375769}
   buildCamera: {fileID: 2108065766}
@@ -2425,7 +2425,12 @@ MonoBehaviour:
     hoverModel: {fileID: 9006747664887119808, guid: 451f825dd81f5374db70151e3d083c4d,
       type: 3}
     woodCost: 0
-    description: 
+    description: 'Cheap housing. Increases population limit. '
+  - model: {fileID: 919132149155446097, guid: 235e986f29f726a45be24fe59c562fe6, type: 3}
+    hoverModel: {fileID: 919132149155446097, guid: 235e986f29f726a45be24fe59c562fe6,
+      type: 3}
+    woodCost: 0
+    description: Simple Cloud-farm. Produces food and plant materials.
 --- !u!4 &916668902
 Transform:
   m_ObjectHideFlags: 0

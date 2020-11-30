@@ -396,7 +396,8 @@ AnimationClip:
   - time: 24.95
     functionName: GoToMenu
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 7529cbb79015ad04eb48c14075676472,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
