@@ -68,6 +68,7 @@ public class Cities : MonoBehaviour
     public void pauseMovement(bool pause = true)
     {
         m_movementPaused = pause;
+        rb.velocity = Vector3.zero;
     }
 
     void FixedUpdate()
