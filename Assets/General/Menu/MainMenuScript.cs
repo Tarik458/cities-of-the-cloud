@@ -60,9 +60,18 @@ public class MainMenuScript : MonoBehaviour
         Prologue.SetActive(true);
 
 
+    }
 
 
+    public void QuiteGameOption()
+    {
+        Application.Quit();
+    }
 
+
+    public void SceneSwitchToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
 
