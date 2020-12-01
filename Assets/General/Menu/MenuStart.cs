@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class AnimationEvents : MonoBehaviour
+
+
+public class MenuStart : MonoBehaviour
 {
-    public GameObject activator;
-    public GameObject timelineOff;
 
+    public string skpky; //skip key here.
 
     // Start is called before the first frame update
     void Start()
@@ -17,14 +20,19 @@ public class AnimationEvents : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(skpky))
+        {
+            //skip the opening
+            SceneManager.LoadScene("MainMenu");
 
+        }
     }
 
 
 
-    public void GoToMenu()
+    public void SceneSwitchToMenu()
     {
-        activator.SetActive(true);
-        timelineOff.SetActive(false);
+        SceneManager.LoadScene("MainMenu");
     }
+
 }
