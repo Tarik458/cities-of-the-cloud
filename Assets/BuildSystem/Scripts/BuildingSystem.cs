@@ -197,6 +197,7 @@ public class BuildingSystem : MonoBehaviour
                 
                 GamOverlay.enabled = false;
                 BldOverlay.enabled = true;
+                BldOverlay.gameObject.SetActive(true);
                 if(m_cameraController != null) m_cameraController.SetActive(true);
 
                 //Time.timeScale = 0;
@@ -213,6 +214,7 @@ public class BuildingSystem : MonoBehaviour
                 
                 GamOverlay.enabled = true;
                 BldOverlay.enabled = false;
+                BldOverlay.gameObject.SetActive(false);
                 if (m_cameraController != null) m_cameraController.SetActive(false);
 
                 //Time.timeScale = 1;

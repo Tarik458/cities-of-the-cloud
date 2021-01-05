@@ -8,15 +8,6 @@ using UnityEngine.UI;
 
 public class MapBuildSwitch : MonoBehaviour
 {
-
-
-    public GameObject BuildMode;
-    public GameObject MapMode;
-
-
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +24,8 @@ public class MapBuildSwitch : MonoBehaviour
 
     public void SwitchToBuild()
     {
-        MapMode.SetActive(false);
-        BuildMode.SetActive(true);
+        //MapMode.SetActive(false);
+        //BuildMode.SetActive(true);
 
 
     }
@@ -42,8 +33,8 @@ public class MapBuildSwitch : MonoBehaviour
 
     public void SwitchToMap()
     {
-        MapMode.SetActive(true);
-        BuildMode.SetActive(false);
+        //MapMode.SetActive(true);
+        //BuildMode.SetActive(false);
 
 
     }

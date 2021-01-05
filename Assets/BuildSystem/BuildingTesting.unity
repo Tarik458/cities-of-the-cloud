@@ -382,30 +382,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 266014754}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896e527831d208f40ab3ef8d048a49cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e3f415c61e6d644997bdb5a92bc726e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 4
-  height: 4
-  tileSize: 10
-  mainCamera: {fileID: 1324900197}
-  buildCamera: {fileID: 4102219879623635699}
-  GamOverlay: {fileID: 683450692}
-  BldOverlay: {fileID: 938883058}
-  City: {fileID: 1260267965}
-  m_blankTile: {fileID: 1459554601}
-  m_defaultSelectionMarker: {fileID: 1829363483782997671, guid: ea4ab3eddf6de8b4daba62791cc51373,
-    type: 3}
-  m_buildings:
-  - model: {fileID: 919132149155446097, guid: eb5465b6dfa4ee845a70fe650a2395fa, type: 3}
-    hoverModel: {fileID: 9006747664887119808, guid: 451f825dd81f5374db70151e3d083c4d,
-      type: 3}
-    woodCost: 0
-    description: 
-  - model: {fileID: 0}
-    hoverModel: {fileID: 0}
-    woodCost: 0
-    description: 
+  width: 0
+  height: 0
+  tileSize: 0
+  mainCamera: {fileID: 0}
+  buildCamera: {fileID: 0}
+  GamOverlay: {fileID: 0}
+  BldOverlay: {fileID: 0}
+  City: {fileID: 0}
+  m_blankTile: {fileID: 0}
+  m_defaultSelectionMarker: {fileID: 0}
+  m_buildings: []
 --- !u!4 &266014756
 Transform:
   m_ObjectHideFlags: 0
@@ -1493,18 +1483,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294565684}
   m_CullTransparentMesh: 0
---- !u!20 &1324900197 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6717407300474709608, guid: b078d57f57397ec48952b0a7425e1a34,
-    type: 3}
-  m_PrefabInstance: {fileID: 1068553023}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1459554601 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5099939652987079408, guid: 534f1619c316d2e4a9363538a7e9e400,
-    type: 3}
-  m_PrefabInstance: {fileID: 2105062596}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1459554605 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8722728741811318265, guid: 534f1619c316d2e4a9363538a7e9e400,
