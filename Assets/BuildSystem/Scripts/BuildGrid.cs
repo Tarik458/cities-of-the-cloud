@@ -22,7 +22,7 @@ public class BuildGrid
         tileArray = new BuildingSystem.EBuildings[width, height];
         positionsArray = new Vector3[width, height];
 
-        gridOrigin = Vector2.zero;
+        gridOrigin = new Vector2(-(width/2) * tileSize, -(height/2) * tileSize);
 
         // Create grid of blank tiles. (Maybe needs to be list so can be expanded more? Or large of blank tiles so building space not limited?) 
         for (int x = 0; x < tileArray.GetLength(0); x++)
