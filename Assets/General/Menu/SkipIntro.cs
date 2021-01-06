@@ -21,6 +21,10 @@ public class SkipIntro : MonoBehaviour
     public PlayableDirector timelineHere;
     public string skpky; //skip key here.
     private bool opening;
+    private bool keyPressed;
+    public GameObject skipText;
+    private bool skipNow;
+
 
 
 
@@ -28,16 +32,47 @@ public class SkipIntro : MonoBehaviour
     void Start()
     {
         opening = true;
+        keyPressed = false;
+        skipNow = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(skpky) && opening == true && timelineHere.time > 3)
-        {
+        //if (Input.GetKey(skpky) && opening == true && timelineHere.time > 3)
+        //{
             //skip the opening
-            opening = false;
-            timelineHere.time = 56;
+        //    opening = false;
+        //    timelineHere.time = 56;
+        //}
+
+        if (Input.anyKey && keyPressed == false)
+        {
+            if (skipNow == true)
+            {
+                //skip the opening
+                opening = false;
+                timelineHere.time = 56;
+                skipText.SetActive(false);
+            }
+            else
+            {
+                keyPressed = true;
+                skipNow = true;
+                skipText.SetActive(true);
+            }
+
+
         }
+
+
+        if (Input.anyKey == false && skipNow == true)
+        {
+            keyPressed = false;
+        }
+
+
+
+
     }
 }
