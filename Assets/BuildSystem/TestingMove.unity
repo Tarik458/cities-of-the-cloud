@@ -2411,7 +2411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 25
   height: 25
-  tileSize: 10
+  tileSize: 2
   mainCamera: {fileID: 2141375769}
   buildCamera: {fileID: 2108065766}
   GamOverlay: {fileID: 399049487}
