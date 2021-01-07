@@ -2630,6 +2630,39 @@ MonoBehaviour:
       type: 3}
     woodCost: 0
     description: Simple Cloud-farm. Produces food and plant materials.
+  - model: {fileID: 919132149155446097, guid: d43988542fbde2942b42d62f46dc0140, type: 3}
+    hoverModel: {fileID: 919132149155446097, guid: d43988542fbde2942b42d62f46dc0140,
+      type: 3}
+    woodCost: 0
+    description: A workshop that refines materials in to something that can be us
+  - model: {fileID: 919132149155446097, guid: 569658a8b6061b948aee4ef754543850, type: 3}
+    hoverModel: {fileID: 919132149155446097, guid: 569658a8b6061b948aee4ef754543850,
+      type: 3}
+    woodCost: 0
+    description: A sail to catch the wind. Allows your city to move with the wind
+      without using any resources.
+  - model: {fileID: 107616574243783691, guid: 19a2dc354c825a74db46c31cb1345596, type: 3}
+    hoverModel: {fileID: 107616574243783691, guid: 19a2dc354c825a74db46c31cb1345596,
+      type: 3}
+    woodCost: 0
+    description: A Guard Tower. Guards will use this to shoot arrows at threats.
+      Quite durable.
+  - model: {fileID: 919132149155446097, guid: 420126d73e072c3498c0bc6660815d04, type: 3}
+    hoverModel: {fileID: 919132149155446097, guid: 420126d73e072c3498c0bc6660815d04,
+      type: 3}
+    woodCost: 0
+    description: A special structure designed to lower scavangers to the ground so
+      they can harvest materials. Does not work if the cloud is too deep.
+  - model: {fileID: 8070362837539332859, guid: 4c281e75b18cabe4f822cad434d691ec, type: 3}
+    hoverModel: {fileID: 8070362837539332859, guid: 4c281e75b18cabe4f822cad434d691ec,
+      type: 3}
+    woodCost: 0
+    description: Cloud Refinary that extracts cloud essense for use in certain creations.
+  - model: {fileID: 627642653052199559, guid: 84e143e7e14e1514daa356652a93a7dd, type: 3}
+    hoverModel: {fileID: 627642653052199559, guid: 84e143e7e14e1514daa356652a93a7dd,
+      type: 3}
+    woodCost: 0
+    description: An engine that moves a city against the wind. Drains explosive fuel.
 --- !u!4 &916668902
 Transform:
   m_ObjectHideFlags: 0
@@ -3381,7 +3414,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1583468545
 MonoBehaviour:
   m_ObjectHideFlags: 0
