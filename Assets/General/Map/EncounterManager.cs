@@ -160,6 +160,9 @@ public class EncounterManager : MonoBehaviour
             case weather.ICE:
                 m_previewWeather.text = "Icy";
                 break;
+            case weather.FOG:
+                m_previewWeather.text = "Foggy";
+                break;
             default:
                 m_previewWeather.text = "Sunny";
                 break;
