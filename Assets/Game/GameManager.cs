@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
 
     //Cloud graphics
     public List<ParticleSystem> m_clouds;
+    public GameObject snowSfx;
+    public GameObject rainSfx;
+    public GameObject fogSfx;
+    public GameObject iceSfx;
 
     //Events
     [BoxGroup ("Events")]
@@ -67,25 +71,59 @@ public class GameManager : MonoBehaviour
         //setup city + UI
 
         //setup environment
-        Color col = Color.red;
-        switch (m_curEncounter.weather) {
+        //Color col = Color.red;
+        //switch (m_curEncounter.weather) {
+        //    case EncounterManager.weather.RAIN:
+        //        col = Color.green;
+        //        break;
+        //    case EncounterManager.weather.SNOW:
+        //        col = Color.white;
+        //        break;
+        //    case EncounterManager.weather.ICE:
+        //        col = Color.cyan;
+        //        break;
+        //    default:
+        //        col = Color.blue;
+        //        break;
+        //}
+        //foreach(ParticleSystem i in m_clouds) {
+        //    i.startColor = col;
+        //    i.time = 0;
+        //}
+
+
+        //SwitchWeather
+        rainSfx.SetActive(false);
+        fogSfx.SetActive(false);
+        snowSfx.SetActive(false);
+        iceSfx.SetActive(false);
+        switch (m_curEncounter.weather)
+        {
             case EncounterManager.weather.RAIN:
-                col = Color.green;
+                rainSfx.SetActive(true);
                 break;
             case EncounterManager.weather.SNOW:
-                col = Color.white;
+                snowSfx.SetActive(true);
                 break;
             case EncounterManager.weather.ICE:
-                col = Color.cyan;
+                iceSfx.SetActive(true);
+                break;
+            case EncounterManager.weather.FOG:
+                fogSfx.SetActive(true);
                 break;
             default:
-                col = Color.blue;
+                rainSfx.SetActive(false);
                 break;
         }
-        foreach(ParticleSystem i in m_clouds) {
-            i.startColor = col;
-            i.time = 0;
-        }
+
+
+
+
+
+
+
+
+
 
         //play animation
         float animLength = 1f;
