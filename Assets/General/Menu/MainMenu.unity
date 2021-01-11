@@ -172,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &135122204
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1541,7 +1541,7 @@ MonoBehaviour:
   timelineOff: {fileID: 1973733343}
   backButton: {fileID: 1696046175}
   Prologue: {fileID: 16828963}
-  SceneSwitch: TestingMove
+  SceneSwitch: MainGame
 --- !u!1 &1696046175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,7 +1868,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!320 &1973733344
 PlayableDirector:
   m_ObjectHideFlags: 0

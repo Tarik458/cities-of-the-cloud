@@ -47,7 +47,7 @@ public class EncounterManager : MonoBehaviour
         TOTAL
     }
     public List<encounter> m_encounters;
-    //What is this stuff for?
+    //Originally used this to help with generating the full struct list for the encounters. Probably doesn't need to be public. 
     public List<int> ev1;
     public List<int> ev2;
     public int readListNum;
@@ -79,7 +79,7 @@ public class EncounterManager : MonoBehaviour
         encounter.depth = 1000;
         encounter.distance = 200;
         encounter.time = Random.Range(3,10);
-        encounter.weather = (weather)Random.Range(1, (int)weather.TOTAL);
+        encounter.weather = (weather)Random.Range(0, (int)weather.TOTAL);
         encounter.tmptr = 5;
         encounter.windspeed = 15f;
         encounter.target = 0;
@@ -177,5 +177,6 @@ public class EncounterManager : MonoBehaviour
     public void nextEncounter() {
         m_confirmBox.SetActive(false);
         GameManager.obj().nextEncounter(m_encounters[m_nextEncounterIndex]);
+        GenerateEncounters();
     }
 }
