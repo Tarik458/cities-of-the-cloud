@@ -38,6 +38,12 @@ public class BuildingSystem : MonoBehaviour
     {
         BUILDING_HUT,
         BUILDING_FARM,
+        BUILDING_WORKSHOP,
+        BUILDING_SAIL,
+        BUILDING_GUARDTOWER,
+        BUILDING_DIVINGSTATION,
+        BUILDING_REFINERY,
+        BUILDING_ENGINE,
         //etc.
 
         DELETE,
