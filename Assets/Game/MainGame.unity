@@ -3550,8 +3550,8 @@ MonoBehaviour:
     woodCost: 0
     description: A special structure designed to lower scavangers to the ground so
       they can harvest materials. Does not work if the cloud is too deep.
-  - model: {fileID: 8070362837539332859, guid: 4c281e75b18cabe4f822cad434d691ec, type: 3}
-    hoverModel: {fileID: 8070362837539332859, guid: 4c281e75b18cabe4f822cad434d691ec,
+  - model: {fileID: 919132149155446097, guid: 40eae24a898fea747b707bad88d35273, type: 3}
+    hoverModel: {fileID: 919132149155446097, guid: 40eae24a898fea747b707bad88d35273,
       type: 3}
     woodCost: 0
     description: Cloud Refinary that extracts cloud essense for use in certain creations.

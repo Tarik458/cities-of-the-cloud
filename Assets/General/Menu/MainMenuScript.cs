@@ -21,7 +21,10 @@ public class MainMenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        MenuActivator.SetActive(false);
+        timelineOff.SetActive(true);
+        Prologue.SetActive(false);
+        backButton.SetActive(false);
     }
 
     // Update is called once per frame
