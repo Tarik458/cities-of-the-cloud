@@ -12,6 +12,7 @@ public class EncounterManager : MonoBehaviour
     public Text m_previewWeather;
     public Text m_previewSpotted;
     public GameObject m_confirmBox;
+    public int Tnorm; //Temperature norm. Temperature is selected from a random number within 8 degrees of this.
 
     [System.Serializable]
     public struct encounter
@@ -39,13 +40,16 @@ public class EncounterManager : MonoBehaviour
 
     public enum weather {
         NONE,
+        CLOUD,
         RAIN,
-        SNOW,
-        ICE,
+        HEAVYRAIN,
         FOG,
+        STORM,
 
         TOTAL
     }
+
+
     public List<encounter> m_encounters;
     //Originally used this to help with generating the full struct list for the encounters. Probably doesn't need to be public. 
     public List<int> ev1;
@@ -56,6 +60,7 @@ public class EncounterManager : MonoBehaviour
 
     private void Start() {
         GenerateEncounters();
+        Tnorm = Random.Range(-35, 15);
     }
 
     public void GenerateEncounters() {
@@ -71,17 +76,50 @@ public class EncounterManager : MonoBehaviour
 
         encounter encounter;
 
-        encounter.isCombat = Random.Range(0,1) == 0;
+        encounter.isCombat = Random.Range(0, 1) == 0;
         encounter.nonCombatEvent = GameManager.obj().m_defaultEvent;
         encounter.scouting = true;
         encounter.wldplts = 1f;
         encounter.grndmats = 1f;
-        encounter.depth = 1000;
-        encounter.distance = 200;
-        encounter.time = Random.Range(3,10);
-        encounter.weather = (weather)Random.Range(0, (int)weather.TOTAL);
-        encounter.tmptr = 5;
-        encounter.windspeed = 15f;
+
+        //Depth generation
+        var ranNum = Random.Range(0, 10);
+        if (ranNum < 6)
+        {
+            encounter.depth = Random.Range(500, 1500);
+        }
+        else if (ranNum > 7)
+        {
+            encounter.depth = Random.Range(1500, 8000);
+        }
+        else
+        {
+            encounter.depth = Random.Range(90, 500);
+        }
+
+
+        //weather generation
+        var RanNum = Random.Range(0, 20);
+        if (RanNum < 3)
+        {
+
+            encounter.weather = (weather)Random.Range(0, 1);
+
+        }
+        else
+        {
+
+            encounter.weather = (weather)Random.Range(0, (int)weather.TOTAL);
+
+        }
+
+
+
+
+        encounter.distance = Random.Range(80, 1000);
+        encounter.time = Random.Range(1,24);
+        encounter.tmptr = Random.Range((Tnorm - 8), (Tnorm + 8));
+        encounter.windspeed = Random.Range(-35f, 35f);
         encounter.target = 0;
         encounter.relicChance = 0f;
         encounter.objective = 0;
@@ -152,22 +190,45 @@ public class EncounterManager : MonoBehaviour
         switch (encounter.weather)
         {
             case weather.RAIN:
-                m_previewWeather.text = "Rainy";
-                break;
-            case weather.SNOW:
-                m_previewWeather.text = "Snowy";
-                break;
-            case weather.ICE:
-                m_previewWeather.text = "Icy";
+                if (encounter.tmptr < -10)
+                {
+                    m_previewWeather.text = "Icy";
+                }
+                else if (encounter.tmptr < 0)
+                {
+                    m_previewWeather.text = "Snowy";
+                }
+                else
+                {
+                    m_previewWeather.text = "Rainy";
+                }
                 break;
             case weather.FOG:
                 m_previewWeather.text = "Foggy";
+                break;
+            case weather.STORM:
+                m_previewWeather.text = "Stormy";
+                if (Random.Range(0, 1) == 1)
+                {
+                    encounter.windspeed = Random.Range(35f, 100f);
+                }
+                else
+                {
+                    encounter.windspeed = Random.Range(-35f, -100f);
+                }
+                break;
+            case weather.CLOUD:
+                m_previewWeather.text = "Cloudy";
                 break;
             default:
                 m_previewWeather.text = "Sunny";
                 break;
         }
     }
+
+
+
+
     public void setNextEncounter(int index) {
         m_nextEncounterIndex = index;
     }

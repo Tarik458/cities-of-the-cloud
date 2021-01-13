@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public GameObject rainSfx;
     public GameObject fogSfx;
     public GameObject iceSfx;
+    public GameObject stormSfx;
 
     //Events
     [BoxGroup ("Events")]
@@ -97,16 +98,28 @@ public class GameManager : MonoBehaviour
         fogSfx.SetActive(false);
         snowSfx.SetActive(false);
         iceSfx.SetActive(false);
+        stormSfx.SetActive(false);
         switch (m_curEncounter.weather)
         {
             case EncounterManager.weather.RAIN:
-                rainSfx.SetActive(true);
+                if (m_curEncounter.tmptr < -10)
+                {
+                    iceSfx.SetActive(true);
+                }
+                else if (m_curEncounter.tmptr < 0)
+                {
+                    snowSfx.SetActive(true);
+                }
+                else
+                {
+                    rainSfx.SetActive(true);
+                }
                 break;
-            case EncounterManager.weather.SNOW:
-                snowSfx.SetActive(true);
+            case EncounterManager.weather.CLOUD:
+                //snowSfx.SetActive(true);
                 break;
-            case EncounterManager.weather.ICE:
-                iceSfx.SetActive(true);
+            case EncounterManager.weather.STORM:
+                stormSfx.SetActive(true);
                 break;
             case EncounterManager.weather.FOG:
                 fogSfx.SetActive(true);

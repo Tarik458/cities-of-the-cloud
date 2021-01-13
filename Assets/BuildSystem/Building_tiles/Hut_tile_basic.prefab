@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3612635340151745886}
   - component: {fileID: 722802305047185362}
   m_Layer: 0
-  m_Name: Hut_tile_un-optimised
+  m_Name: Hut_tile_basic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2964024704453299339}
-  m_Mesh: {fileID: 3060478949993261912, guid: eb5465b6dfa4ee845a70fe650a2395fa, type: 3}
+  m_Mesh: {fileID: -4820558059653745578, guid: eb5465b6dfa4ee845a70fe650a2395fa, type: 3}
 --- !u!23 &3612635340151745886
 MeshRenderer:
   m_ObjectHideFlags: 0
