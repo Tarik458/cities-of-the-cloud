@@ -26,11 +26,11 @@ public class GameManager : MonoBehaviour
 
     //Cloud graphics
     public List<ParticleSystem> m_clouds;
-    public GameObject snowSfx;
-    public GameObject rainSfx;
-    public GameObject fogSfx;
-    public GameObject iceSfx;
-    public GameObject stormSfx;
+    public GameObject snowSFX;
+    public GameObject rainSFX;
+    public GameObject fogSFX;
+    public GameObject iceSFX;
+    public GameObject stormSFX;
 
     //Events
     [BoxGroup ("Events")]
@@ -40,14 +40,25 @@ public class GameManager : MonoBehaviour
 
     EncounterManager.encounter m_curEncounter;
 
+    //Other
+    public CombatManager m_combat;
+
+    //Debug
+    [TitleGroup ("Debug")]
+    public bool m_startCombat = false;
+
     void Start()
     {
         m_uiCover = m_mainCanvas.transform.Find("Cover").GetComponent<Image>();
         m_uiCover.CrossFadeAlpha(1f, 0f, true);
         m_uiCover.gameObject.SetActive(true);
 
+        if (m_combat == null) m_combat = GameObject.FindObjectOfType<CombatManager>();
+
         //Load city
 
+        //Debug
+        m_curEncounter.isCombat = m_startCombat;
         //Load encounter
         StartCoroutine(startEncounter());
     }
@@ -92,51 +103,41 @@ public class GameManager : MonoBehaviour
         //    i.time = 0;
         //}
 
-
         //SwitchWeather
-        rainSfx.SetActive(false);
-        fogSfx.SetActive(false);
-        snowSfx.SetActive(false);
-        iceSfx.SetActive(false);
-        stormSfx.SetActive(false);
+        rainSFX.SetActive(false);
+        fogSFX.SetActive(false);
+        snowSFX.SetActive(false);
+        iceSFX.SetActive(false);
+        stormSFX.SetActive(false);
         switch (m_curEncounter.weather)
         {
             case EncounterManager.weather.RAIN:
                 if (m_curEncounter.tmptr < -10)
                 {
-                    iceSfx.SetActive(true);
+                    iceSFX.SetActive(true);
                 }
                 else if (m_curEncounter.tmptr < 0)
                 {
-                    snowSfx.SetActive(true);
+                    snowSFX.SetActive(true);
                 }
                 else
                 {
-                    rainSfx.SetActive(true);
+                    rainSFX.SetActive(true);
                 }
                 break;
             case EncounterManager.weather.CLOUD:
-                //snowSfx.SetActive(true);
+                //snowSFX.SetActive(true);
                 break;
             case EncounterManager.weather.STORM:
-                stormSfx.SetActive(true);
+                stormSFX.SetActive(true);
                 break;
             case EncounterManager.weather.FOG:
-                fogSfx.SetActive(true);
+                fogSFX.SetActive(true);
                 break;
             default:
-                rainSfx.SetActive(false);
+                rainSFX.SetActive(false);
                 break;
         }
-
-
-
-
-
-
-
-
-
 
         //play animation
         float animLength = 1f;
@@ -147,7 +148,8 @@ public class GameManager : MonoBehaviour
 
         //combat?
         if (m_curEncounter.isCombat) {
-            LeanPool.Spawn(m_combatPlaceholder, m_popupParent);
+            //LeanPool.Spawn(m_combatPlaceholder, m_popupParent);
+            m_combat.StartCombat();
         }
         //event
         else {
