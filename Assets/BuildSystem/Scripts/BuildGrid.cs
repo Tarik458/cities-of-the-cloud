@@ -22,6 +22,7 @@ public class BuildGrid
         tileArray = new BuildingSystem.EBuildings[width, height];
         positionsArray = new Vector3[width, height];
 
+        // Minus half to centre grid.
         gridOrigin = new Vector2(-(width/2) * tileSize, -(height/2) * tileSize);
 
         // Create grid of blank tiles. (Maybe needs to be list so can be expanded more? Or large of blank tiles so building space not limited?) 
@@ -33,10 +34,21 @@ public class BuildGrid
                 Vector2 worldPos = TranslateToWorldPos(x, y);
                 Vector3 worldPos3 = new Vector3(worldPos.x, 0f, worldPos.y);
                 positionsArray[x, y] = worldPos3;
-                GameObject obj = LeanPool.Spawn(blankTile, parent);
-                obj.SetActive(true);
-                obj.transform.position = worldPos3 + parent.transform.position;
-                obj.tag = "BuildTile";
+                if (x == 12 && y == 12)
+                {
+                    tileArray[x, y] = BuildingSystem.EBuildings.STATIONARY_ISLAND;
+                    GameObject obj = LeanPool.Spawn(blankTile, parent);
+                    obj.SetActive(true);
+                    obj.transform.position = worldPos3 + parent.transform.position;
+                    obj.tag = "BuildTile";
+                }
+                else
+                {
+                    GameObject obj = LeanPool.Spawn(blankTile, parent);
+                    obj.SetActive(true);
+                    obj.transform.position = worldPos3 + parent.transform.position;
+                    obj.tag = "BuildTile";
+                }
             }
         }
     }

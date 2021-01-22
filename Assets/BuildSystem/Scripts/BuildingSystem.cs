@@ -16,6 +16,7 @@ public class BuildingSystem : MonoBehaviour
     public Canvas BldOverlay;
     public GameObject City;
     public GameObject m_blankTile;
+    public GameObject m_islandTile;
     public GameObject m_defaultSelectionMarker;
     private GameObject m_selectionMarker;
     public Building[] m_buildings;
@@ -44,6 +45,7 @@ public class BuildingSystem : MonoBehaviour
         BUILDING_DIVINGSTATION,
         BUILDING_REFINERY,
         BUILDING_ENGINE,
+        STATIONARY_ISLAND,
         //etc.
 
         DELETE,
@@ -121,7 +123,7 @@ public class BuildingSystem : MonoBehaviour
                     else if (m_selectedBuilding == EBuildings.DELETE)
                     {
                         LeanPool.Despawn(currentHit);
-                        LeanPool.Spawn(m_blankTile, gridPos, RandBuildRotate(), City.transform);
+                        LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
                         m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL);
                     }
 
