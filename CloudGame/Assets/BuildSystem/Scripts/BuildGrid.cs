@@ -8,6 +8,7 @@ public class BuildGrid
     private int width;
     private int height;
     private BuildingSystem.EBuildings[,] tileArray;
+    private GameObject[,] tileObjArray;
     private Vector3[,] positionsArray;    
     private int tileSize;
     private Vector2 gridOrigin;
@@ -20,6 +21,7 @@ public class BuildGrid
         this.tileSize = tileSize;
         this.parent = parent;
         tileArray = new BuildingSystem.EBuildings[width, height];
+        tileObjArray = new GameObject[width, height];
         positionsArray = new Vector3[width, height];
 
         // Minus half to centre grid.
@@ -41,13 +43,15 @@ public class BuildGrid
                     obj.SetActive(false);
                     obj.transform.position = worldPos3 + parent.transform.position;
                     obj.tag = "BuildTile";
+                    tileObjArray[x, y] = obj;
                 }
                 else
                 {
                     GameObject obj = LeanPool.Spawn(blankTile, parent);
-                    obj.SetActive(true);
+                    obj.SetActive(false);
                     obj.transform.position = worldPos3 + parent.transform.position;
                     obj.tag = "BuildTile";
+                    tileObjArray[x, y] = obj;
                 }
             }
         }
@@ -90,8 +94,17 @@ public class BuildGrid
     {
         return tileArray[tilePos.x, tilePos.y];
     }
-    public void setTileBuilding(Vector2Int tilePos, BuildingSystem.EBuildings building)
+    public void setTileBuilding(Vector2Int tilePos, BuildingSystem.EBuildings building, GameObject obj)
     {
         tileArray[tilePos.x, tilePos.y] = building;
+        tileObjArray[tilePos.x, tilePos.y] = obj;
+    }
+    public void setTileActive(int tileposX, int tileposY)
+    {
+        tileObjArray[tileposX, tileposY].SetActive(true);
+    }
+    public void setTileInactive(int tileposX, int tileposY)
+    {
+        tileObjArray[tileposX, tileposY].SetActive(false);
     }
 }
