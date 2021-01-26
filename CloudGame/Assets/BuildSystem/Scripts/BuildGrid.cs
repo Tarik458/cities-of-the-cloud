@@ -32,13 +32,13 @@ public class BuildGrid
             {
                 tileArray[x, y] = BuildingSystem.EBuildings.NULL;
                 Vector2 worldPos = TranslateToWorldPos(x, y);
-                Vector3 worldPos3 = new Vector3(worldPos.x, 0f, worldPos.y);
+                Vector3 worldPos3 = new Vector3(worldPos.x, 1f, worldPos.y);
                 positionsArray[x, y] = worldPos3;
-                if (x == 12 && y == 12)
+                if (x >= 11 && x <= 13 && y >= 11 && y <= 13)
                 {
                     tileArray[x, y] = BuildingSystem.EBuildings.STATIONARY_ISLAND;
                     GameObject obj = LeanPool.Spawn(blankTile, parent);
-                    obj.SetActive(true);
+                    obj.SetActive(false);
                     obj.transform.position = worldPos3 + parent.transform.position;
                     obj.tag = "BuildTile";
                 }
