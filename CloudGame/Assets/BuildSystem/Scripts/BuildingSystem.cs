@@ -114,17 +114,18 @@ public class BuildingSystem : MonoBehaviour
                         //check resource cost
                         GameObject obj =LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].model, gridPos, m_randomRotation, City.transform);
                         obj.tag = "BuildTile";
-                        m_buildGrid.setTileBuilding(gridRef, m_selectedBuilding);
+                        m_buildGrid.setTileBuilding(gridRef, m_selectedBuilding, obj);
                         m_randomRotation = RandBuildRotate();
                         m_selectionMarker.transform.rotation = m_randomRotation;
+                        AdjacencyChecks(gridRef, true);
 
                         //pay resource cost
                     }
                     else if (m_selectedBuilding == EBuildings.DELETE)
                     {
                         LeanPool.Despawn(currentHit);
-                        LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
-                        m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL);
+                        GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
+                        m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
                     }
 
                 }
@@ -191,6 +192,66 @@ public class BuildingSystem : MonoBehaviour
         return true;
     }
 
+    // Runs adjacency checks and only shows blank tiles that are next to buildings.
+    private void TileVisibilityON(bool visiToggle)
+    {
+        Vector2Int tileToCheckCoords = new Vector2Int(0,0);
+        EBuildings tileValue;
+        
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                tileToCheckCoords.x = x;
+                tileToCheckCoords.y = y;
+
+                tileValue = m_buildGrid.getTileBuilding(tileToCheckCoords);
+                if (tileValue != EBuildings.NULL)
+                {
+                    AdjacencyChecks(tileToCheckCoords, visiToggle);
+                }
+
+            }
+        }
+    }
+
+    private void AdjacencyChecks(Vector2Int checkPos, bool visiToggle)
+    {
+        Vector2Int adjCheckPos = checkPos;
+        EBuildings adjTileVal;
+
+        adjCheckPos.x -= 1;
+        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+
+        adjCheckPos.x += 2;
+        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+
+        adjCheckPos.x -= 1;
+        adjCheckPos.y -= 1;
+        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+
+        adjCheckPos.y += 2;
+        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+
+
+    }
+
+    private void toggleBlanksActive(Vector2Int adjCheckPos, EBuildings tileVal, bool show)
+    {
+        if (tileVal == EBuildings.NULL && show)
+        {
+            m_buildGrid.setTileActive(adjCheckPos.x, adjCheckPos.y);
+        }
+        else if(tileVal == EBuildings.NULL && !show)
+        {
+            m_buildGrid.setTileInactive(adjCheckPos.x, adjCheckPos.y);
+        }
+    }
+
     // Switches camera, switches UI, un/pauses game
     // Updates resource counts
     private void enableBuildMode(bool enable = true)
@@ -200,6 +261,7 @@ public class BuildingSystem : MonoBehaviour
             m_buildModeEnabled = enable;
             if (m_buildModeEnabled)
             {
+                TileVisibilityON(true);
                 mainCamera.enabled = false;
                 buildCamera.enabled = true;
                 
@@ -217,6 +279,7 @@ public class BuildingSystem : MonoBehaviour
             }
             else
             {
+                TileVisibilityON(false);
                 mainCamera.enabled = true;
                 buildCamera.enabled = false;
                 
