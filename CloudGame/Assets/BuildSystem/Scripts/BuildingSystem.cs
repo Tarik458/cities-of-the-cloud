@@ -73,6 +73,20 @@ public class BuildingSystem : MonoBehaviour
         m_selectionMarker.SetActive(false);
 
         m_city = City.GetComponent<Cities>();
+
+        //Debug - Spawn a few buildings when the scene is initialised
+        Vector2Int gridRef = new Vector2Int(10, 10);
+        Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
+        placeBuilding(EBuildings.BUILDING_DIVINGSTATION, gridRef, gridPos);
+        gridRef = new Vector2Int(10, 11);
+        gridPos = m_buildGrid.getWorldPos(gridRef);
+        placeBuilding(EBuildings.BUILDING_FARM, gridRef, gridPos);
+        gridRef = new Vector2Int(14, 11);
+        gridPos = m_buildGrid.getWorldPos(gridRef);
+        placeBuilding(EBuildings.BUILDING_HUT, gridRef, gridPos);
+        gridRef = new Vector2Int(14, 14);
+        gridPos = m_buildGrid.getWorldPos(gridRef);
+        placeBuilding(EBuildings.BUILDING_SAIL, gridRef, gridPos);
     }
 
     void Update()
@@ -102,32 +116,13 @@ public class BuildingSystem : MonoBehaviour
                 Debug.DrawLine(ray.origin, hit.point);
                 Vector2Int gridRef = m_buildGrid.TranslateWorldToGridPos(hit.point);
                 Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
-                EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);               
+                               
                 m_selectionMarker.SetActive(true);
                 m_selectionMarker.transform.position = gridPos;                
 
                 if (Input.GetMouseButtonDown(0) && m_selectedBuilding != EBuildings.NULL)
                 {
-                    if (m_selectedBuilding != EBuildings.DELETE && gridBuilding == EBuildings.NULL)
-                    {
-                        LeanPool.Despawn(currentHit);
-                        //check resource cost
-                        GameObject obj =LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].model, gridPos, m_randomRotation, City.transform);
-                        obj.tag = "BuildTile";
-                        m_buildGrid.setTileBuilding(gridRef, m_selectedBuilding, obj);
-                        m_randomRotation = RandBuildRotate();
-                        m_selectionMarker.transform.rotation = m_randomRotation;
-                        AdjacencyChecks(gridRef, true);
-
-                        //pay resource cost
-                    }
-                    else if (m_selectedBuilding == EBuildings.DELETE)
-                    {
-                        LeanPool.Despawn(currentHit);
-                        GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
-                        m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
-                    }
-
+                    placeBuilding(m_selectedBuilding, gridRef, gridPos);
                 }
                 else if (Input.GetMouseButtonDown(1))
                 {
@@ -144,6 +139,26 @@ public class BuildingSystem : MonoBehaviour
         else
         {
             m_selectionMarker.SetActive(false);
+        }
+    }
+    void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos) {
+        EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);
+        if (building != EBuildings.DELETE && gridBuilding == EBuildings.NULL) {
+            LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
+
+            //TODO: check + pay resource cost
+
+            GameObject obj = LeanPool.Spawn(m_buildings[(int)building].model, gridPos, m_randomRotation, City.transform);
+            obj.tag = "BuildTile";
+            m_buildGrid.setTileBuilding(gridRef, building, obj);
+            m_randomRotation = RandBuildRotate();
+            m_selectionMarker.transform.rotation = m_randomRotation;
+            AdjacencyChecks(gridRef, true);
+        }
+        else if (m_selectedBuilding == EBuildings.DELETE) {
+            LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
+            GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
+            m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
         }
     }
 
@@ -191,35 +206,12 @@ public class BuildingSystem : MonoBehaviour
 
         return true;
     }
-
-    // Runs adjacency checks and only shows blank tiles that are next to buildings.
-    private void TileVisibilityON(bool visiToggle)
-    {
-        Vector2Int tileToCheckCoords = new Vector2Int(0,0);
-        EBuildings tileValue;
-        
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                tileToCheckCoords.x = x;
-                tileToCheckCoords.y = y;
-
-                tileValue = m_buildGrid.getTileBuilding(tileToCheckCoords);
-                if (tileValue != EBuildings.NULL)
-                {
-                    AdjacencyChecks(tileToCheckCoords, visiToggle);
-                }
-
-            }
-        }
-    }
-
     private void AdjacencyChecks(Vector2Int checkPos, bool visiToggle)
     {
         Vector2Int adjCheckPos = checkPos;
         EBuildings adjTileVal;
 
+        //TODO: Make sure this check is bounds-safe
         adjCheckPos.x -= 1;
         adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
         toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
@@ -236,20 +228,13 @@ public class BuildingSystem : MonoBehaviour
         adjCheckPos.y += 2;
         adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
         toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
-
-
     }
-
     private void toggleBlanksActive(Vector2Int adjCheckPos, EBuildings tileVal, bool show)
     {
-        if (tileVal == EBuildings.NULL && show)
+        if (tileVal == EBuildings.NULL)
         {
-            m_buildGrid.setTileActive(adjCheckPos.x, adjCheckPos.y);
-        }
-        else if(tileVal == EBuildings.NULL && !show)
-        {
-            m_buildGrid.setTileInactive(adjCheckPos.x, adjCheckPos.y);
-        }
+            m_buildGrid.setTileActive(adjCheckPos.x, adjCheckPos.y, m_buildModeEnabled, show);
+        }        
     }
 
     // Switches camera, switches UI, un/pauses game
@@ -261,7 +246,7 @@ public class BuildingSystem : MonoBehaviour
             m_buildModeEnabled = enable;
             if (m_buildModeEnabled)
             {
-                TileVisibilityON(true);
+                m_buildGrid.setBlankTilesVisibility(true);
                 mainCamera.enabled = false;
                 buildCamera.enabled = true;
                 
@@ -279,7 +264,7 @@ public class BuildingSystem : MonoBehaviour
             }
             else
             {
-                TileVisibilityON(false);
+                m_buildGrid.setBlankTilesVisibility(false);
                 mainCamera.enabled = true;
                 buildCamera.enabled = false;
                 
@@ -328,4 +313,7 @@ public class BuildingSystem : MonoBehaviour
     //        meshRenderer.material = onOff ? highlightedMaterial : originalMaterial;
     //    }
     //}
+    public BuildGrid getBuildGrid() {
+        return m_buildGrid;
+    }
 }
