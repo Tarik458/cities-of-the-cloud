@@ -9,7 +9,8 @@ public class BuildGrid
     private int height;
     private BuildingSystem.EBuildings[,] tileArray;
     private GameObject[,] tileObjArray;
-    private Vector3[,] positionsArray;    
+    private Vector3[,] positionsArray;
+    private bool[,] tileActiveArray;
     private int tileSize;
     private Vector2 gridOrigin;
     private Transform parent;
@@ -23,6 +24,7 @@ public class BuildGrid
         tileArray = new BuildingSystem.EBuildings[width, height];
         tileObjArray = new GameObject[width, height];
         positionsArray = new Vector3[width, height];
+        tileActiveArray = new bool[width, height];
 
         // Minus half to centre grid.
         gridOrigin = new Vector2(-(width/2) * tileSize, -(height/2) * tileSize);
@@ -38,12 +40,7 @@ public class BuildGrid
                 positionsArray[x, y] = worldPos3;
                 if (x >= 11 && x <= 13 && y >= 11 && y <= 13)
                 {
-                    tileArray[x, y] = BuildingSystem.EBuildings.STATIONARY_ISLAND;
-                    GameObject obj = LeanPool.Spawn(blankTile, parent);
-                    obj.SetActive(false);
-                    obj.transform.position = worldPos3 + parent.transform.position;
-                    obj.tag = "BuildTile";
-                    tileObjArray[x, y] = obj;
+                    tileArray[x, y] = BuildingSystem.EBuildings.STATIONARY_ISLAND;                  
                 }
                 else
                 {
@@ -52,6 +49,8 @@ public class BuildGrid
                     obj.transform.position = worldPos3 + parent.transform.position;
                     obj.tag = "BuildTile";
                     tileObjArray[x, y] = obj;
+
+                    if (x >= 10 && x <= 14 && y >= 10 && y <= 14) tileActiveArray[x, y] = true;
                 }
             }
         }
@@ -81,30 +80,50 @@ public class BuildGrid
         //Debug.Log("grid pos: " + pos);
         return pos;
     }
+    public Vector2Int getSize() {
+        return new Vector2Int(width, height);
+    }
     public Vector2Int TranslateWorldToGridPos(Vector3 worldPos)
     {
         return TranslateWorldToGridPos(worldPos.x, worldPos.z);
     }
-
     public Vector3 getWorldPos(Vector2Int tilePos)
     {
         return positionsArray[tilePos.x, tilePos.y] + parent.transform.position;
+    }
+    public Vector3 getWorldPos(int x, int y) {
+        return positionsArray[x, y] + parent.transform.position;
     }
     public BuildingSystem.EBuildings getTileBuilding(Vector2Int tilePos)
     {
         return tileArray[tilePos.x, tilePos.y];
     }
-    public void setTileBuilding(Vector2Int tilePos, BuildingSystem.EBuildings building, GameObject obj)
-    {
+    public BuildingSystem.EBuildings getTileBuilding(int x, int y) {
+        return tileArray[x, y];
+    }
+    public GameObject getTileObj(Vector2Int tilePos) {
+        return tileObjArray[tilePos.x, tilePos.y];
+    }
+    public GameObject getTileObj(int x, int y) {
+        return tileObjArray[x, y];
+    }
+    public void setTileBuilding(Vector2Int tilePos, BuildingSystem.EBuildings building, GameObject obj) {
         tileArray[tilePos.x, tilePos.y] = building;
         tileObjArray[tilePos.x, tilePos.y] = obj;
     }
-    public void setTileActive(int tileposX, int tileposY)
+    public void setTileActive(int tileposX, int tileposY, bool buildMode, bool active = true)
     {
-        tileObjArray[tileposX, tileposY].SetActive(true);
+        tileActiveArray[tileposX, tileposY] = active;
+        if(buildMode) tileObjArray[tileposX, tileposY].SetActive(active);
     }
-    public void setTileInactive(int tileposX, int tileposY)
-    {
-        tileObjArray[tileposX, tileposY].SetActive(false);
+    public void setBlankTilesVisibility(bool visible) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (tileArray[x,y] == BuildingSystem.EBuildings.NULL && tileObjArray[x, y] != null) {
+                    if (!visible) tileObjArray[x, y].SetActive(false);
+                    else if (tileActiveArray[x, y]) tileObjArray[x, y].SetActive(true);
+                }
+            }
+        }
     }
 }
