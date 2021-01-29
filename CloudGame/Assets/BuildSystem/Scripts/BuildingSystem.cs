@@ -206,6 +206,7 @@ public class BuildingSystem : MonoBehaviour
 
         return true;
     }
+
     private void AdjacencyChecks(Vector2Int checkPos, bool visiToggle)
     {
         Vector2Int adjCheckPos = checkPos;
@@ -213,22 +214,35 @@ public class BuildingSystem : MonoBehaviour
 
         //TODO: Make sure this check is bounds-safe
         adjCheckPos.x -= 1;
-        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
-        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        if (adjCheckPos.x >= 0)
+        {
+            adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+            toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        }
 
         adjCheckPos.x += 2;
-        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
-        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        if (adjCheckPos.x < width)
+        {
+            adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+            toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        }
 
-        adjCheckPos.x -= 1;
+        adjCheckPos.x = checkPos.x;
         adjCheckPos.y -= 1;
-        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
-        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        if (adjCheckPos.y >= 0)
+        {
+            adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+            toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        }
 
         adjCheckPos.y += 2;
-        adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
-        toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        if (adjCheckPos.y <= height)
+        {
+            adjTileVal = m_buildGrid.getTileBuilding(adjCheckPos);
+            toggleBlanksActive(adjCheckPos, adjTileVal, visiToggle);
+        }
     }
+
     private void toggleBlanksActive(Vector2Int adjCheckPos, EBuildings tileVal, bool show)
     {
         if (tileVal == EBuildings.NULL)
