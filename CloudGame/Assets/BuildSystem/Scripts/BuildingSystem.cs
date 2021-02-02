@@ -37,16 +37,20 @@ public class BuildingSystem : MonoBehaviour
     [System.Serializable]
     public enum EBuildings
     {
+        //buildings that don't affect combat        
         BUILDING_HUT,
         BUILDING_FARM,
         BUILDING_WORKSHOP,
+        //combat buildings
         BUILDING_SAIL,
-        BUILDING_GUARDTOWER,
         BUILDING_DIVINGSTATION,
         BUILDING_REFINERY,
         BUILDING_ENGINE,
-        STATIONARY_ISLAND,
+        //combat weapons
+        BUILDING_GUARDTOWER,
         //etc.
+        
+        STATIONARY_ISLAND,
 
         DELETE,
         NULL
@@ -83,7 +87,7 @@ public class BuildingSystem : MonoBehaviour
         placeBuilding(EBuildings.BUILDING_FARM, gridRef, gridPos);
         gridRef = new Vector2Int(14, 11);
         gridPos = m_buildGrid.getWorldPos(gridRef);
-        placeBuilding(EBuildings.BUILDING_HUT, gridRef, gridPos);
+        placeBuilding(EBuildings.BUILDING_GUARDTOWER, gridRef, gridPos);
         gridRef = new Vector2Int(14, 14);
         gridPos = m_buildGrid.getWorldPos(gridRef);
         placeBuilding(EBuildings.BUILDING_SAIL, gridRef, gridPos);
