@@ -175,7 +175,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     // Generate a random rotation for buildings (for now).
-    private void BuildRotate()
+    public void BuildRotate()
     {
         if (m_buildingRotation.y == 270f)
         {
