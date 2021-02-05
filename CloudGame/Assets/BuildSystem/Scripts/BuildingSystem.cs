@@ -28,6 +28,9 @@ public class BuildingSystem : MonoBehaviour
 
     private bool m_buildModeEnabled = false;
 
+    private Quaternion m_buildingRotation = new Quaternion(0f, 0f, 0f, 0f);
+    private float m_valToRotate = 0f;
+
     private Cities m_city;
 
     //Resources
@@ -100,6 +103,11 @@ public class BuildingSystem : MonoBehaviour
             ToggleBuildMode();
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            BuildRotate();
+        }
+
         if (m_buildModeEnabled)
         {
             MouseRaycast();
@@ -122,7 +130,8 @@ public class BuildingSystem : MonoBehaviour
                 Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
                                
                 m_selectionMarker.SetActive(true);
-                m_selectionMarker.transform.position = gridPos;                
+                m_selectionMarker.transform.position = gridPos;
+                m_selectionMarker.transform.rotation = m_buildingRotation;
 
                 if (Input.GetMouseButtonDown(0) && m_selectedBuilding != EBuildings.NULL)
                 {
@@ -152,26 +161,31 @@ public class BuildingSystem : MonoBehaviour
 
             //TODO: check + pay resource cost
 
-            GameObject obj = LeanPool.Spawn(m_buildings[(int)building].model, gridPos, m_randomRotation, City.transform);
+            GameObject obj = LeanPool.Spawn(m_buildings[(int)building].model, gridPos, m_buildingRotation, City.transform);
             obj.tag = "BuildTile";
             m_buildGrid.setTileBuilding(gridRef, building, obj);
-            m_randomRotation = RandBuildRotate();
-            m_selectionMarker.transform.rotation = m_randomRotation;
+            m_selectionMarker.transform.rotation = m_buildingRotation;
             AdjacencyChecks(gridRef, true);
         }
         else if (m_selectedBuilding == EBuildings.DELETE) {
             LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
-            GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_randomRotation, City.transform);
+            GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_buildingRotation, City.transform);
             m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
         }
     }
 
-    Quaternion m_randomRotation;
     // Generate a random rotation for buildings (for now).
-    private Quaternion RandBuildRotate()
-    {        
-        float rotate = (float)Random.Range(0, 4) * 90f;
-        return Quaternion.Euler(0f, rotate, 0f);
+    private void BuildRotate()
+    {
+        if (m_buildingRotation.y == 270f)
+        {
+            m_valToRotate = 0f;
+        }
+        else
+        {
+            m_valToRotate += 90f;
+        }
+        m_buildingRotation = Quaternion.Euler(0f, m_valToRotate, 0f);
     }
 
     // Checks build cost and selects building to place
@@ -191,8 +205,7 @@ public class BuildingSystem : MonoBehaviour
                 Debug.Log("selected building " + buildingRef);
                 
                 m_selectionMarker = LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].hoverModel); //add transparent model for hover
-                m_randomRotation = RandBuildRotate();
-                m_selectionMarker.transform.rotation = m_randomRotation;
+                m_selectionMarker.transform.rotation = m_buildingRotation;
             }
             else m_selectedBuilding = EBuildings.NULL;
         }        
