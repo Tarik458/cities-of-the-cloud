@@ -14,6 +14,7 @@ public class BuildingSystem : MonoBehaviour
     public Camera buildCamera;
     public Canvas GamOverlay;
     public Canvas BldOverlay;
+    public GameObject Maincanvasgroup;
     public GameObject City;
     public GameObject m_blankTile;
     public GameObject m_islandTile;
@@ -298,7 +299,8 @@ public class BuildingSystem : MonoBehaviour
                 m_buildGrid.setBlankTilesVisibility(false);
                 mainCamera.enabled = true;
                 buildCamera.enabled = false;
-                
+
+                Maincanvasgroup.SetActive(true);
                 GamOverlay.enabled = true;
                 BldOverlay.enabled = false;
                 BldOverlay.gameObject.SetActive(false);
