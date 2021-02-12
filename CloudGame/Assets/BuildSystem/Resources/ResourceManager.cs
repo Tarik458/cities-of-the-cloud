@@ -5,38 +5,39 @@ using UnityEngine.UI;
 
 public class ResourceManager
 {
-    public int food;
-    public int people;
-    public int materials;
-    public Text foodtxt;
-    public Text peopletxt;
-    public Text materialstxt;
+    int m_food;
+    int m_people;
+    int m_materials;
+    int m_foodMax = 100;
+    int m_peopleMax = 100;
+    int m_materialsMax = 100;
+    Text m_foodText;
+    Text m_peopleText;
+    Text m_materialsText;
 
-
-    public ResourceManager(int Food, Text FoodText, int People, Text PeopleText, int Materials, Text MaterialsText)
+    public ResourceManager(int food = 100, int people = 100, int materials = 100)
     {
-       
-        food = 100;
-        people = 100;
-        materials = 100;
-
-        foodtxt = FoodText;
-        peopletxt = PeopleText;
-        materialstxt = MaterialsText;
-
+        m_food = food;
+        m_people = people;
+        m_materials = materials;
     }
-
 
     void Update()
     {
-        SetUIVals();
+        updateUI();
     }
 
-    public void SetUIVals()
+    void updateUI() {
+        m_foodText.text = "Food: " + m_food.ToString();
+        m_peopleText.text = "People: " + m_people.ToString();
+        m_materialsText.text = "Materials: " + m_materials.ToString();
+    }
+    public void SetUIObjs(Text food, Text people, Text materials)
     {
-        foodtxt.text = "Food: " + food.ToString();
-        peopletxt.text = "People: " + people.ToString();
-        materialstxt.text = "Materials: " + materials.ToString();
+        m_foodText = food;
+        m_peopleText = people;
+        m_materialsText = materials;
+        updateUI();
     }
 
     public int GetResourceValue(string resourceType)
@@ -46,13 +47,13 @@ public class ResourceManager
         switch (typeCheck)
         {
             case "food":
-                getVal = food;
+                getVal = m_food;
                 break;
             case "people":
-                getVal = people;
+                getVal = m_people;
                 break;
             case "materials":
-                getVal = materials;
+                getVal = m_materials;
                 break;
             default:
                 Debug.Log("a whadda ya doin?");
@@ -60,64 +61,47 @@ public class ResourceManager
                 break;
 
         }
+        Debug.Log("get val " + getVal);
 
         return getVal;
     }
 
     public bool SetResourceValue(string resourceType, int changeValue)
-    {
-        string typeCheck = resourceType;
-        int sumValue;
-        int de_signedChange;
-        bool validChange;
-
-        if (changeValue < 0)
-        {
-            de_signedChange = changeValue * -1;
-        }
-        else
-        {
-            de_signedChange = changeValue;
-        }
-        
-        switch (typeCheck)
-        {
-            case "food":
-                if (de_signedChange <= food)
-                {
-                    sumValue = food + changeValue;
-                    validChange = true;
-                    food = sumValue;
-                }
-                validChange = false;
+    {       
+        bool validChange = false;
+        ref int resourceVal = ref m_food;
+        int clamp = 0;
+        switch (resourceType) {
+            case "food": 
+                resourceVal = ref m_food;
+                clamp = m_foodMax;
                 break;
             case "people":
-                if (de_signedChange <= people)
-                {
-                    sumValue = people + changeValue;
-                    validChange = true;
-                    people = sumValue;
-                }
-                validChange = false;
+                resourceVal = ref m_people;
+                clamp = m_peopleMax;
                 break;
             case "materials":
-                if (de_signedChange <= materials)
-                {
-                    sumValue = materials + changeValue;
-                    validChange = true;
-                    materials = sumValue;
-                }
-                validChange = false;
+                resourceVal = ref m_materials;
+                clamp = m_materialsMax;
                 break;
             default:
-                Debug.Log("a whadda ya doin?");
-                sumValue = -1;
-                validChange = false;
+                Debug.LogError("Invalid resource type string");                
                 break;
         }
 
+        if(changeValue < 0) {
+            if(Mathf.Abs(changeValue) <= resourceVal) {
+                resourceVal += changeValue;
+                validChange = true;
+            }
+        }
+        else {
+            resourceVal += changeValue;
+            resourceVal = Mathf.Clamp(resourceVal, 0, clamp);
+            validChange = true;
+        }
+
+        if (validChange) updateUI();
         return validChange;
-
     }
-
 }
