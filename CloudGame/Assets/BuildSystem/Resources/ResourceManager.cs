@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResourceManager : MonoBehaviour
+public class ResourceManager
 {
     public int food;
     public int people;
@@ -12,21 +12,27 @@ public class ResourceManager : MonoBehaviour
     public Text peopletxt;
     public Text materialstxt;
 
-    // Start is called before the first frame update
-    void Start()
+
+    public ResourceManager(int Food, Text FoodText, int People, Text PeopleText, int Materials, Text MaterialsText)
     {
+       
         food = 100;
         people = 100;
         materials = 100;
+
+        foodtxt = FoodText;
+        peopletxt = PeopleText;
+        materialstxt = MaterialsText;
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         SetUIVals();
     }
 
-    private void SetUIVals()
+    public void SetUIVals()
     {
         foodtxt.text = "Food: " + food.ToString();
         peopletxt.text = "People: " + people.ToString();
@@ -77,26 +83,29 @@ public class ResourceManager : MonoBehaviour
         switch (typeCheck)
         {
             case "food":
-                if (de_signedChange < food)
+                if (de_signedChange <= food)
                 {
                     sumValue = food + changeValue;
                     validChange = true;
+                    food = sumValue;
                 }
                 validChange = false;
                 break;
             case "people":
-                if (de_signedChange < people)
+                if (de_signedChange <= people)
                 {
                     sumValue = people + changeValue;
                     validChange = true;
+                    people = sumValue;
                 }
                 validChange = false;
                 break;
             case "materials":
-                if (de_signedChange < materials)
+                if (de_signedChange <= materials)
                 {
                     sumValue = materials + changeValue;
                     validChange = true;
+                    materials = sumValue;
                 }
                 validChange = false;
                 break;
