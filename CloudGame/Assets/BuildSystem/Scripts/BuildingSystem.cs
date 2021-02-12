@@ -6,9 +6,14 @@ using Lean.Pool;
 
 public class BuildingSystem : MonoBehaviour
 {
+    public GameObject resourceManager;
+
     public int width;
     public int height;
     public int tileSize;
+    public Text foodtxt;
+    public Text peopletxt;
+    public Text materialstxt;
 
     public Camera mainCamera;
     public Camera buildCamera;
@@ -23,7 +28,8 @@ public class BuildingSystem : MonoBehaviour
     public Building[] m_buildings;
     private EBuildings m_selectedBuilding = EBuildings.NULL;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
-    
+
+    private ResourceManager m_resourceManager = null;
     private BuildGrid m_buildGrid = null;
     private CameraController m_cameraController = null;
 
@@ -64,9 +70,14 @@ public class BuildingSystem : MonoBehaviour
     {
         public GameObject model;
         public GameObject hoverModel;
-        public int woodCost;
+        public int materialCost;
         public string description;
     }
+
+   // public int returncost()
+   // { 
+        
+   // }
 
     // Initialise.
     void Start()
@@ -74,8 +85,10 @@ public class BuildingSystem : MonoBehaviour
         m_cameraController = GetComponent<CameraController>();
         BldOverlay.enabled = false;
         m_buildGrid = new BuildGrid(width, height, tileSize, m_blankTile, City.transform);
+        m_resourceManager = new ResourceManager(100, foodtxt, 100, peopletxt, 100,materialstxt);
 
         BuildButton.setBuildingSystem(this);
+
 
         m_selectionMarker = LeanPool.Spawn(m_defaultSelectionMarker);
         m_selectionMarker.SetActive(false);
@@ -155,18 +168,33 @@ public class BuildingSystem : MonoBehaviour
             m_selectionMarker.SetActive(false);
         }
     }
-    void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos) {
+    void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos)
+    {
+        int buildingCost = m_buildings[(int)building].materialCost;
+
         EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);
-        if (building != EBuildings.DELETE && gridBuilding == EBuildings.NULL) {
-            LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
+        if (building != EBuildings.DELETE && gridBuilding == EBuildings.NULL) 
+        {
 
-            //TODO: check + pay resource cost
+            
+            if (buildingCost <= m_resourceManager.GetResourceValue("materials")) 
+            {
+                LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
 
-            GameObject obj = LeanPool.Spawn(m_buildings[(int)building].model, gridPos, m_buildingRotation, City.transform);
-            obj.tag = "BuildTile";
-            m_buildGrid.setTileBuilding(gridRef, building, obj);
-            m_selectionMarker.transform.rotation = m_buildingRotation;
-            AdjacencyChecks(gridRef, true);
+                GameObject obj = LeanPool.Spawn(m_buildings[(int)building].model, gridPos, m_buildingRotation, City.transform);
+                obj.tag = "BuildTile";
+                m_buildGrid.setTileBuilding(gridRef, building, obj);
+                m_selectionMarker.transform.rotation = m_buildingRotation;
+                AdjacencyChecks(gridRef, true);
+
+                m_resourceManager.SetResourceValue("materials", -buildingCost);
+                
+
+                m_resourceManager.SetUIVals();
+
+            }
+            
+            
         }
         else if (m_selectedBuilding == EBuildings.DELETE) {
             LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
@@ -200,30 +228,20 @@ public class BuildingSystem : MonoBehaviour
         }
         else
         {
-            if (checkBuildCost(buildingRef))
-            {
-                m_selectedBuilding = buildingRef;
-                Debug.Log("selected building " + buildingRef);
-                
-                m_selectionMarker = LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].hoverModel); //add transparent model for hover
-                m_selectionMarker.transform.rotation = m_buildingRotation;
-            }
-            else m_selectedBuilding = EBuildings.NULL;
-        }        
+            m_selectedBuilding = buildingRef;
+            Debug.Log("selected building " + buildingRef);
+            
+            m_selectionMarker = LeanPool.Spawn(m_buildings[(int)m_selectedBuilding].hoverModel); //add transparent model for hover
+            m_selectionMarker.transform.rotation = m_buildingRotation;
+           
+        }  
+        
     }
     public void SelectBuildingToPlace(int buildingRef)
     {
         SelectBuildingToPlace((EBuildings)buildingRef);
     }
-    bool checkBuildCost(EBuildings buildingRef)
-    {
-        if (buildingRef == EBuildings.NULL) return false;
-
-        if (m_buildings[(int)buildingRef].woodCost > m_resourceCountWood) return false;
-        //etc.
-
-        return true;
-    }
+    
 
     private void AdjacencyChecks(Vector2Int checkPos, bool visiToggle)
     {
@@ -283,6 +301,7 @@ public class BuildingSystem : MonoBehaviour
                 buildCamera.enabled = true;
                 
                 GamOverlay.enabled = false;
+                GamOverlay.gameObject.SetActive(false);
                 BldOverlay.enabled = true;
                 BldOverlay.gameObject.SetActive(true);
                 if(m_cameraController != null) m_cameraController.SetActive(true);
@@ -302,6 +321,7 @@ public class BuildingSystem : MonoBehaviour
 
                 Maincanvasgroup.SetActive(true);
                 GamOverlay.enabled = true;
+                GamOverlay.gameObject.SetActive(true);
                 BldOverlay.enabled = false;
                 BldOverlay.gameObject.SetActive(false);
                 if (m_cameraController != null) m_cameraController.SetActive(false);
@@ -349,4 +369,7 @@ public class BuildingSystem : MonoBehaviour
     public BuildGrid getBuildGrid() {
         return m_buildGrid;
     }
+
+
+
 }
