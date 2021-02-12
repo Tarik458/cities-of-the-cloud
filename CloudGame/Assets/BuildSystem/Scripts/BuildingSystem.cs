@@ -6,14 +6,9 @@ using Lean.Pool;
 
 public class BuildingSystem : MonoBehaviour
 {
-    public GameObject resourceManager;
-
     public int width;
     public int height;
     public int tileSize;
-    public Text foodtxt;
-    public Text peopletxt;
-    public Text materialstxt;
 
     public Camera mainCamera;
     public Camera buildCamera;
@@ -29,7 +24,6 @@ public class BuildingSystem : MonoBehaviour
     private EBuildings m_selectedBuilding = EBuildings.NULL;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
 
-    private ResourceManager m_resourceManager = null;
     private BuildGrid m_buildGrid = null;
     private CameraController m_cameraController = null;
 
@@ -40,9 +34,10 @@ public class BuildingSystem : MonoBehaviour
 
     private Cities m_city;
 
-    //Resources
-    int m_resourceCountWood;
-    int m_resourceCountStone;   //etc.
+    //Resource UI
+    public Text m_foodText;
+    public Text m_peopleText;
+    public Text m_materialsText;
 
     [System.Serializable]
     public enum EBuildings
@@ -85,7 +80,7 @@ public class BuildingSystem : MonoBehaviour
         m_cameraController = GetComponent<CameraController>();
         BldOverlay.enabled = false;
         m_buildGrid = new BuildGrid(width, height, tileSize, m_blankTile, City.transform);
-        m_resourceManager = new ResourceManager(100, foodtxt, 100, peopletxt, 100,materialstxt);
+        
 
         BuildButton.setBuildingSystem(this);
 
@@ -177,7 +172,7 @@ public class BuildingSystem : MonoBehaviour
         {
 
             
-            if (buildingCost <= m_resourceManager.GetResourceValue("materials")) 
+            if (buildingCost <= GameManager.obj().m_resources.GetResourceValue("materials")) 
             {
                 LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
 
@@ -187,14 +182,8 @@ public class BuildingSystem : MonoBehaviour
                 m_selectionMarker.transform.rotation = m_buildingRotation;
                 AdjacencyChecks(gridRef, true);
 
-                m_resourceManager.SetResourceValue("materials", -buildingCost);
-                
-
-                m_resourceManager.SetUIVals();
-
+                GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
             }
-            
-            
         }
         else if (m_selectedBuilding == EBuildings.DELETE) {
             LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
