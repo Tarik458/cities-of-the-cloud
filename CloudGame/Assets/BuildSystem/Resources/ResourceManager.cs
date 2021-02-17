@@ -61,7 +61,7 @@ public class ResourceManager
                 break;
 
         }
-        Debug.Log("get val " + getVal);
+        //Debug.Log("get val " + getVal);
 
         return getVal;
     }
