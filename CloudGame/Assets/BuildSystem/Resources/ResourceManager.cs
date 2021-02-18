@@ -8,14 +8,14 @@ public class ResourceManager
     int m_food;
     int m_people;
     int m_materials;
-    int m_foodMax = 100;
-    int m_peopleMax = 100;
-    int m_materialsMax = 100;
+    int m_foodMax;
+    int m_peopleMax;
+    int m_materialsMax;
     Text m_foodText;
     Text m_peopleText;
     Text m_materialsText;
 
-    public ResourceManager(int food = 100, int people = 100, int materials = 100)
+    public ResourceManager(int food = 500, int people = 100, int materials = 100)
     {
         m_food = food;
         m_people = people;
@@ -61,7 +61,7 @@ public class ResourceManager
                 break;
 
         }
-        Debug.Log("get val " + getVal);
+        //Debug.Log("get val " + getVal);
 
         return getVal;
     }
