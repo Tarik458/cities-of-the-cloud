@@ -12,7 +12,7 @@ public class BuildingSystem : MonoBehaviour
 
     public Camera mainCamera;
     public Camera buildCamera;
-    public Canvas GamOverlay;
+    public GameObject mainUI;
     public Canvas BldOverlay;
     public GameObject Maincanvasgroup;
     public GameObject City;
@@ -289,8 +289,7 @@ public class BuildingSystem : MonoBehaviour
                 mainCamera.enabled = false;
                 buildCamera.enabled = true;
                 
-                GamOverlay.enabled = false;
-                GamOverlay.gameObject.SetActive(false);
+                mainUI.SetActive(false);
                 BldOverlay.enabled = true;
                 BldOverlay.gameObject.SetActive(true);
                 if(m_cameraController != null) m_cameraController.SetActive(true);
@@ -309,8 +308,7 @@ public class BuildingSystem : MonoBehaviour
                 buildCamera.enabled = false;
 
                 Maincanvasgroup.SetActive(true);
-                GamOverlay.enabled = true;
-                GamOverlay.gameObject.SetActive(true);
+                mainUI.SetActive(true);
                 BldOverlay.enabled = false;
                 BldOverlay.gameObject.SetActive(false);
                 if (m_cameraController != null) m_cameraController.SetActive(false);
