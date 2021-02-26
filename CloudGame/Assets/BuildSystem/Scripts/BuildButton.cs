@@ -14,4 +14,12 @@ public class BuildButton : MonoBehaviour
     {
         s_buildingSystem.SelectBuildingToPlace(m_building);
     }
+    public void showDescription()
+    {
+        s_buildingSystem.descriptionTooltip(m_building);
+    }
+    public void hideDescription()
+    {
+        ToolTip.HideTooltip_static();
+    }
 }
