@@ -360,7 +360,7 @@ public class BuildingSystem : MonoBehaviour
 
     public void descriptionTooltip(EBuildings buildingRef)
     {
-        ToolTip.ShowTooltip_static(m_buildings[(int)buildingRef].description);
+        ToolTip.ShowTooltip_static(m_buildings[(int)buildingRef].description, m_buildings[(int)buildingRef].materialCost);
     }
 
 
