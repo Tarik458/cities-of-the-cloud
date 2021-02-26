@@ -213,7 +213,8 @@ public class BuildingSystem : MonoBehaviour
         if (buildingRef >= EBuildings.DELETE)
         {
             m_selectedBuilding = buildingRef;
-            m_selectionMarker = LeanPool.Spawn(m_defaultSelectionMarker); 
+            m_selectionMarker = LeanPool.Spawn(m_defaultSelectionMarker);
+            
         }
         else
         {
@@ -355,6 +356,11 @@ public class BuildingSystem : MonoBehaviour
     //}
     public BuildGrid getBuildGrid() {
         return m_buildGrid;
+    }
+
+    public void descriptionTooltip(EBuildings buildingRef)
+    {
+        ToolTip.ShowTooltip_static(m_buildings[(int)buildingRef].description);
     }
 
 
