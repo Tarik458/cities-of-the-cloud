@@ -9,6 +9,7 @@ public class BuildingSystem : MonoBehaviour
     public int width;
     public int height;
     public int tileSize;
+    public bool combatDisabled;
 
     public Camera mainCamera;
     public Camera buildCamera;
@@ -19,6 +20,7 @@ public class BuildingSystem : MonoBehaviour
     public GameObject m_blankTile;
     public GameObject m_islandTile;
     public GameObject m_defaultSelectionMarker;
+
     private GameObject m_selectionMarker;
     public Building[] m_buildings;
     private EBuildings m_selectedBuilding = EBuildings.NULL;
@@ -107,7 +109,7 @@ public class BuildingSystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && combatDisabled)
         {
             ToggleBuildMode();
         }
