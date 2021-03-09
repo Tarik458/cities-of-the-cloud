@@ -55,6 +55,7 @@ public class BuildingSystem : MonoBehaviour
         BUILDING_ENGINE,
         //combat weapons
         BUILDING_GUARDTOWER,
+        BUILDING_TREBUCHET,
         //etc.
         
         STATIONARY_ISLAND,
