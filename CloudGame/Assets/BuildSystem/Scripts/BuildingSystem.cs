@@ -298,9 +298,6 @@ public class BuildingSystem : MonoBehaviour
                 BldOverlay.gameObject.SetActive(true);
                 if(m_cameraController != null) m_cameraController.SetActive(true);
 
-                //Time.timeScale = 0;
-                m_city.pauseMovement();
-
                 //update resources
                     //get resources from movement mode
                 updateResourceUI();
@@ -316,9 +313,6 @@ public class BuildingSystem : MonoBehaviour
                 BldOverlay.enabled = false;
                 BldOverlay.gameObject.SetActive(false);
                 if (m_cameraController != null) m_cameraController.SetActive(false);
-
-                //Time.timeScale = 1;
-                m_city.pauseMovement(false);
 
                 m_selectionMarker.SetActive(false);
 
