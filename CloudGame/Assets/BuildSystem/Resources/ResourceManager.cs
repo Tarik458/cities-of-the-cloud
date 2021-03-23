@@ -104,4 +104,50 @@ public class ResourceManager
         if (validChange) updateUI();
         return validChange;
     }
+
+    // Add resources gained from buildings & combat.
+    public void TickUp(BuildingSystem bldgrid /* ,int enemySize*/)
+    {
+        int foodProd = 0;
+        int materialsProd = 0;
+        int peopleProd = 0;
+
+        Vector2Int checkTile;
+
+
+        // Calculate number of buildings producing specific resource.
+        for (int x = 0; x < bldgrid.getBuildGrid().getSize().x; x++)
+        {
+            for (int y = 0; y < bldgrid.getBuildGrid().getSize().y; y++)
+            {
+                checkTile = new Vector2Int(x, y);
+
+                switch (bldgrid.getBuildGrid().getTileBuilding(checkTile))
+                {
+                    case BuildingSystem.EBuildings.BUILDING_FARM:
+                        materialsProd += 1;
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_DIVINGSTATION:
+                        materialsProd += 1;
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_HUT:
+                        foodProd += 1;
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_WORKSHOP:
+                        peopleProd += 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        SetResourceValue("food", /*building resource increase*/ 5 * foodProd);
+        SetResourceValue("materials", /*building resource increase*/ 5 * materialsProd);
+        SetResourceValue("people", /*building resource increase*/ 5 * peopleProd);
+
+        // Rewards from (enemy city * enemySize) or beast encounter.
+    }
+
+
 }
