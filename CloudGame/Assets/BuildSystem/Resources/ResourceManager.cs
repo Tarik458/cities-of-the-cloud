@@ -20,6 +20,9 @@ public class ResourceManager
         m_food = food;
         m_people = people;
         m_materials = materials;
+        m_foodMax = 9999;
+        m_peopleMax = 9999;
+        m_materialsMax = 9999;
     }
 
     void Update()
@@ -104,4 +107,72 @@ public class ResourceManager
         if (validChange) updateUI();
         return validChange;
     }
+
+    // Add resources gained from buildings & combat.
+    public void TickUp(BuildingSystem bldgrid /* ,int enemySize, depth for diving room*/)
+    {
+        // Initilised value including island resources.
+        int foodProd = 10;
+        int materialProd = 5;
+        int peopleProd = 0;
+
+        Vector2Int checkTile;
+
+        //affected by damage?
+
+        // Calculate number of buildings producing specific resource.
+        for (int x = 0; x < bldgrid.getBuildGrid().getSize().x; x++)
+        {
+            for (int y = 0; y < bldgrid.getBuildGrid().getSize().y; y++)
+            {
+                checkTile = new Vector2Int(x, y);
+
+                switch (bldgrid.getBuildGrid().getTileBuilding(checkTile))
+                {
+                    case BuildingSystem.EBuildings.BUILDING_HUT:
+                        // + people? +25 max pop.(1 off or recalculate), or is maxpop currpop
+                        foodProd += 1;
+                        break; 
+                    case BuildingSystem.EBuildings.BUILDING_FARM:
+                        foodProd += 50;
+                        // -2 tools?
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_WORKSHOP:
+                        materialProd += 10;
+                        // +15 tools?
+                        // +5 loot from enemy city
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_DIVINGSTATION:
+                        //if depth >500m -> default: +10mat +5food: *ground mats multiplier.
+                        materialProd += 10; //*modifier
+                        foodProd += 5; //*modifier
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_REFINERY:
+                        // +5 explosives, -5 tools
+                        materialProd -= 2;
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_ENGINE:
+                        // - some explosives.
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_GUARDTOWER:
+                        // - 5 tools
+                        break;
+                    case BuildingSystem.EBuildings.BUILDING_TREBUCHET:
+                        materialProd -= 10;
+                        // explosive shots?
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        SetResourceValue("food", /*building resource increase*/ 5 * foodProd);
+        SetResourceValue("materials", /*building resource increase*/ 5 * materialProd);
+        SetResourceValue("people", /*building resource increase*/ 5 * peopleProd);
+
+        // Rewards from (enemy city * enemySize) or beast encounter: city(+materials & +people), beast(+food & +materials)
+    }
+
+
 }
