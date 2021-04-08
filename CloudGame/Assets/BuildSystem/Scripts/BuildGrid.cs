@@ -5,15 +5,15 @@ using Lean.Pool;
 
 public class BuildGrid
 {
-    private int width;
-    private int height;
-    private BuildingSystem.EBuildings[,] tileArray;
-    private GameObject[,] tileObjArray;
-    private Vector3[,] positionsArray;
-    private bool[,] tileActiveArray;
-    private int tileSize;
-    private Vector2 gridOrigin;
-    private Transform parent;
+    public int width;
+    public int height;
+    public BuildingSystem.EBuildings[,] tileArray;
+    public GameObject[,] tileObjArray;
+    public Vector3[,] positionsArray;
+    public bool[,] tileActiveArray;
+    public int tileSize;
+    public Vector2 gridOrigin;
+    public Transform parent;
 
     public BuildGrid(int width, int height, int tileSize, GameObject blankTile, Transform parent)
     {
