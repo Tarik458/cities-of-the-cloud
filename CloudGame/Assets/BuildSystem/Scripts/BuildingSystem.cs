@@ -26,7 +26,7 @@ public class BuildingSystem : MonoBehaviour
     private EBuildings m_selectedBuilding = EBuildings.NULL;
     private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
 
-    private BuildGrid m_buildGrid = null;
+    public BuildGrid m_buildGrid = null;
     private CameraController m_cameraController = null;
 
     private bool m_buildModeEnabled = false;
