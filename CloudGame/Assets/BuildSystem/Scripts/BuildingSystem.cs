@@ -168,7 +168,12 @@ public class BuildingSystem : MonoBehaviour
     }
     void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos)
     {
-        int buildingCost = m_buildings[(int)building].materialCost;
+        int buildingCost;
+        if (building != EBuildings.DELETE)
+        {
+            buildingCost = m_buildings[(int)building].materialCost;
+        }
+        else buildingCost = -5;
 
         EBuildings gridBuilding = m_buildGrid.getTileBuilding(gridRef);
         if (building != EBuildings.DELETE && gridBuilding == EBuildings.NULL) 
@@ -192,6 +197,7 @@ public class BuildingSystem : MonoBehaviour
             LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
             GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_buildingRotation, City.transform);
             m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
+            GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
         }
     }
 
