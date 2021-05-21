@@ -185,11 +185,11 @@ public class BuildingSystem : MonoBehaviour
         EBuildings[,] loadedCity;
         if (first)
         {
-            loadedCity = CitySaver.Load("playerCity", m_buildGrid.width, true);
+            loadedCity = CitySaver.Load("/playerCity", m_buildGrid.width, true);
         }
         else
         {
-            loadedCity = CitySaver.Load("playerCity", m_buildGrid.width);
+            loadedCity = CitySaver.Load("/playerCity", m_buildGrid.width);
         }
 
         for (int x = 0; x < m_buildGrid.width; x++)
@@ -204,7 +204,6 @@ public class BuildingSystem : MonoBehaviour
                     placeBuilding(loadedCity[x, y], pos, gridPos, false);
                 }
 
-
             }
         }
     }
@@ -212,7 +211,7 @@ public class BuildingSystem : MonoBehaviour
     public void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos, bool usingCost = true)
     {
         int buildingCost;
-        if (building != EBuildings.DELETE)
+        if (building != EBuildings.DELETE && building != EBuildings.STATIONARY_ISLAND)
         {
             buildingCost = m_buildings[(int)building].materialCost;
         }

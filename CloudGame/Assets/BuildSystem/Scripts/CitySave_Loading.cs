@@ -13,7 +13,7 @@ public class CitySave_Loading
 
     public CitySave_Loading()
     {
-        file = "playerCity";
+        file = "/playerCity";
         extension = ".xml";
     }
 
