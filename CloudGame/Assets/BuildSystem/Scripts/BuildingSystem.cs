@@ -24,9 +24,9 @@ public class BuildingSystem : MonoBehaviour
     private GameObject m_selectionMarker;
     public Building[] m_buildings;
     private EBuildings m_selectedBuilding = EBuildings.NULL;
-    private Color highlightColor = new Color(1.0f, 0.7f, 0.0f);
 
     public BuildGrid m_buildGrid = null;
+    public CitySave_Loading CitySaver = new CitySave_Loading();
     private CameraController m_cameraController = null;
 
     private bool m_buildModeEnabled = false;
@@ -52,7 +52,6 @@ public class BuildingSystem : MonoBehaviour
         BUILDING_SAIL,
         BUILDING_DIVINGSTATION,
         BUILDING_REFINERY,
-        BUILDING_ENGINE,
         //combat weapons
         BUILDING_GUARDTOWER,
         BUILDING_TREBUCHET,
@@ -72,10 +71,7 @@ public class BuildingSystem : MonoBehaviour
         public string description;
     }
 
-   // public int returncost()
-   // { 
-        
-   // }
+
 
     // Initialise.
     void Start()
@@ -83,7 +79,6 @@ public class BuildingSystem : MonoBehaviour
         m_cameraController = GetComponent<CameraController>();
         BldOverlay.enabled = false;
         m_buildGrid = new BuildGrid(width, height, tileSize, m_blankTile, City.transform);
-        
 
         BuildButton.setBuildingSystem(this);
 
@@ -92,7 +87,18 @@ public class BuildingSystem : MonoBehaviour
         m_selectionMarker.SetActive(false);
 
         m_city = City.GetComponent<Cities>();
+        if (StaticVals.FirstTime)
+        {
 
+            loadCity(true);         
+            StaticVals.FirstTime = false;
+        }
+        else
+        {
+            loadCity();
+        }
+
+        /*
         //Debug - Spawn a few buildings when the scene is initialised
         Vector2Int gridRef = new Vector2Int(10, 10);
         Vector3 gridPos = m_buildGrid.getWorldPos(gridRef);
@@ -106,6 +112,8 @@ public class BuildingSystem : MonoBehaviour
         gridRef = new Vector2Int(14, 14);
         gridPos = m_buildGrid.getWorldPos(gridRef);
         placeBuilding(EBuildings.BUILDING_SAIL, gridRef, gridPos);
+        */
+        saveCity();
     }
 
     void Update()
@@ -166,7 +174,42 @@ public class BuildingSystem : MonoBehaviour
             m_selectionMarker.SetActive(false);
         }
     }
-    void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos)
+    
+    public void saveCity()
+    {
+        m_buildGrid.saveCity(CitySaver);
+    }
+
+    public void loadCity(bool first = false)
+    {
+        EBuildings[,] loadedCity;
+        if (first)
+        {
+            loadedCity = CitySaver.Load("playerCity", m_buildGrid.width, true);
+        }
+        else
+        {
+            loadedCity = CitySaver.Load("playerCity", m_buildGrid.width);
+        }
+
+        for (int x = 0; x < m_buildGrid.width; x++)
+        {
+            for (int y = 0; y < m_buildGrid.height; y++)
+            {
+                if(loadedCity[x, y] != EBuildings.NULL)
+                {
+                    Vector2Int pos = new Vector2Int(x, y);
+
+                    Vector3 gridPos = m_buildGrid.getWorldPos(pos);
+                    placeBuilding(loadedCity[x, y], pos, gridPos, false);
+                }
+
+
+            }
+        }
+    }
+
+    public void placeBuilding(EBuildings building, Vector2Int gridRef, Vector3 gridPos, bool usingCost = true)
     {
         int buildingCost;
         if (building != EBuildings.DELETE)
@@ -188,16 +231,23 @@ public class BuildingSystem : MonoBehaviour
                 obj.tag = "BuildTile";
                 m_buildGrid.setTileBuilding(gridRef, building, obj);
                 m_selectionMarker.transform.rotation = m_buildingRotation;
-                AdjacencyChecks(gridRef, true);
 
-                GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
+                AdjacencyChecks(gridRef, true);
+                if (usingCost)
+                {
+                    GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
+                }
             }
         }
         else if (m_selectedBuilding == EBuildings.DELETE) {
             LeanPool.Despawn(m_buildGrid.getTileObj(gridRef));
             GameObject obj = LeanPool.Spawn(m_blankTile, gridPos, m_buildingRotation, City.transform);
             m_buildGrid.setTileBuilding(gridRef, EBuildings.NULL, obj);
-            GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
+            AdjacencyChecks(gridRef, false);
+            if (usingCost)
+            {
+                GameManager.obj().m_resources.SetResourceValue("materials", -buildingCost);
+            }
         }
     }
 
@@ -240,7 +290,7 @@ public class BuildingSystem : MonoBehaviour
     {
         SelectBuildingToPlace((EBuildings)buildingRef);
     }
-    
+
 
     private void AdjacencyChecks(Vector2Int checkPos, bool visiToggle)
     {
@@ -322,8 +372,7 @@ public class BuildingSystem : MonoBehaviour
 
                 m_selectionMarker.SetActive(false);
 
-                //update resources
-                    //send resources to movement mode                
+                saveCity();               
             }
         }
     }
