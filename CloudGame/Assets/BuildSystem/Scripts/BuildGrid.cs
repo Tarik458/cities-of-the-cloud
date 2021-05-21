@@ -14,7 +14,7 @@ public class BuildGrid
     public int tileSize;
     public Vector2 gridOrigin;
     public Transform parent;
-    string filePath = "playerCity";
+    string filePath = "/playerCity";
 
     public BuildGrid(int width, int height, int tileSize, GameObject blankTile, Transform parent)
     {
