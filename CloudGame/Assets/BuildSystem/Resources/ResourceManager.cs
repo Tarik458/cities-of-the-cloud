@@ -15,11 +15,21 @@ public class ResourceManager
     Text m_peopleText;
     Text m_materialsText;
 
-    public ResourceManager(int food = 500, int people = 100, int materials = 100)
+    public ResourceManager(int food = 500, int people = 200, int materials = 300)
     {
-        m_food = food;
-        m_people = people;
-        m_materials = materials;
+        if (StaticVals.FirstTime)
+        {
+            m_food = food;
+            m_people = people;
+            m_materials = materials;
+        }
+        else
+        {
+            m_food = StaticVals.Food ;
+            m_people = StaticVals.Citizens;
+            m_materials = StaticVals.Materials;
+        }
+
         m_foodMax = 9999;
         m_peopleMax = 9999;
         m_materialsMax = 9999;
@@ -34,6 +44,10 @@ public class ResourceManager
         m_foodText.text = "Food: " + m_food.ToString();
         m_peopleText.text = "People: " + m_people.ToString();
         m_materialsText.text = "Materials: " + m_materials.ToString();
+
+        StaticVals.Food = m_food;
+        StaticVals.Citizens = m_people;
+        StaticVals.Materials = m_materials;
     }
     public void SetUIObjs(Text food, Text people, Text materials)
     {
@@ -150,9 +164,6 @@ public class ResourceManager
                     case BuildingSystem.EBuildings.BUILDING_REFINERY:
                         // +5 explosives, -5 tools
                         materialProd -= 2;
-                        break;
-                    case BuildingSystem.EBuildings.BUILDING_ENGINE:
-                        // - some explosives.
                         break;
                     case BuildingSystem.EBuildings.BUILDING_GUARDTOWER:
                         // - 5 tools

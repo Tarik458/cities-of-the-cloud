@@ -14,6 +14,7 @@ public class BuildGrid
     public int tileSize;
     public Vector2 gridOrigin;
     public Transform parent;
+    string filePath = "playerCity";
 
     public BuildGrid(int width, int height, int tileSize, GameObject blankTile, Transform parent)
     {
@@ -54,6 +55,11 @@ public class BuildGrid
                 }
             }
         }
+    }
+
+    public void saveCity(CitySave_Loading Saver)
+    {
+        Saver.Save(tileArray, filePath, width);
     }
 
 
