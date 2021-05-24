@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
+using System.Xml;
 
 public class CitySave_Loading
 {
@@ -24,7 +25,7 @@ public class CitySave_Loading
 
     string fullPathInitialLoad()
     {
-        return "Assets/Resources/basePlayerCity" + extension;
+        return "cities-of-the-cloud_Data/Resources/basePlayerCity" + extension;
     }
     
     void setPath(string newPath)
@@ -76,6 +77,8 @@ public class CitySave_Loading
         xmlSerializer = new XmlSerializer(typeof(BuildingSystem.EBuildings[]));
 
         FileStream readStream;
+        BuildingSystem.EBuildings[] loadedCity1D;
+
 
         if (first)
         {
@@ -86,9 +89,11 @@ public class CitySave_Loading
             readStream = new FileStream(fullPathSave(), FileMode.Open);
         }
 
+        loadedCity1D = (BuildingSystem.EBuildings[])xmlSerializer.Deserialize(readStream);
+        
         BuildingSystem.EBuildings[,] loadedCity = new BuildingSystem.EBuildings[width_Height, width_Height];
 
-        BuildingSystem.EBuildings[] loadedCity1D = (BuildingSystem.EBuildings[])xmlSerializer.Deserialize(readStream);
+       
 
         int counter1D = 0;
         for (int x = 0; x < width_Height; x++)
